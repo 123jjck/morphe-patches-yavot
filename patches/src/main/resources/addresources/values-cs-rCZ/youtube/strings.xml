@@ -300,59 +300,7 @@ Omezení:
 
 Zkontrolujte, zda je název balíčku správný a aplikace je nainstalována"</string>
   <string name="morphe_external_downloader_empty_warning">Název balíčku nemůže být prázdný</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Hlasový překlad</string>
-  <string name="morphe_vot_screen_summary">Přečte titulky videa nahlas pomocí text-to-speech v zařízení, synchronizovaně s přehráváním</string>
-  <string name="morphe_vot_enabled_title">Hlasový překlad</string>
-  <string name="morphe_vot_caption_language_title">Jazyk</string>
-  <string name="morphe_vot_translation_service_title">Poskytovatel překladu</string>
-  <string name="morphe_vot_original_audio_volume_title">Hlasitost původního zvuku</string>
-  <string name="morphe_vot_original_audio_volume_summary">Hlasitost původního zvuku YouTube během překladu</string>
-  <string name="morphe_vot_translation_volume_title">Hlasitost překladu</string>
-  <string name="morphe_vot_translation_volume_summary">Hlasitost namluveného překladu</string>
-  <string name="morphe_vot_max_speech_rate_title">Maximální rychlost řeči</string>
-  <string name="morphe_vot_max_speech_rate_summary">Maximální multiplikátor rychlosti řeči při umisťování řeči do slotu titulku</string>
-  <string name="morphe_vot_mymemory_info_summary">"Bezplatné překladatelské API, nevyžaduje se žádný API klíč. Až 5 000 znaků denně v bezplatné verzi nebo až 50 000 znaků denně s e-mailovou adresou.
-
-Klepnutím zde otevřete MyMemory.translated.net"</string>
-  <string name="morphe_vot_mymemory_email_title">E-mail MyMemory</string>
-  <string name="morphe_vot_mymemory_email_summary">Volitelné. Zadejte svou e-mailovou adresu MyMemory a zvyšte denní limit z 5 000 na 50 000 znaků. Nechte prázdné, pokud chcete použít anonymní limit</string>
-  <string name="morphe_vot_openrouter_info_summary">"Placené překlady pomocí AI přes OpenRouter. Doplňte kredit a přeložte tisíce videí. Mistral Nemo je nejlevnější možnost, Gemma 4 nabízí nejvyšší kvalitu.
-
-Klepnutím zde otevřete OpenRouter.ai"</string>
-  <string name="morphe_vot_openrouter_api_key_title">API klíč OpenRouter</string>
-  <string name="morphe_vot_openrouter_api_key_summary">Váš API klíč OpenRouter. Vytvořte klíč na OpenRouter.ai > Pracovní prostor > API klíče</string>
-  <string name="morphe_vot_openrouter_model_title">Model OpenRouter</string>
-  <string name="morphe_vot_openrouter_model_custom">Vlastní</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouter není nakonfigurován</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Zadejte svůj API klíč OpenRouter v nastavení a poté vyberte tohoto poskytovatele</string>
-  <string name="morphe_vot_cost_free">Zdarma</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s za 100 hodin videa</string>
-  <string name="morphe_vot_tts_voice_type">Hlas</string>
-  <string name="morphe_vot_tts_system">Systém</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Multijazyčný mužský</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Multijazyčná ženská</string>
-  <string name="morphe_vot_voice_gender_male">Mužský</string>
-  <string name="morphe_vot_voice_gender_female">Ženský</string>
-  <string name="morphe_vot_tts_sample">Je čas na přeměnu! </string>
-  <string name="morphe_vot_http_error_title">Překlad nedostupný</string>
-  <string name="morphe_vot_http_error_message">"Překladatelská služba vrátila chybu HTTP %s. Vaše IP adresa byla pravděpodobně omezena až na 24 hodin.
-
-Pro pokračování v používání překladů přepněte v nastavení jiného poskytovatele překladů nebo použijte VPN"</string>
-  <string name="morphe_vot_do_not_show_again">Už se to nezobrazovat</string>
-  <string name="morphe_vot_export_api_key_warning">"Vaše nastavení obsahuje API klíč OpenRouter.
-
-API klíč by se nikdy neměl sdílet. Kdokoli s přístupem k němu může používat vaše kredity OpenRouter"</string>
-  <string name="morphe_vot_openrouter_credits_title">Limit kreditu OpenRouter byl dosažen</string>
-  <string name="morphe_vot_openrouter_credits_message">Byl vyčerpán limit kreditu OpenRouter. Doplňte zůstatek nebo zvyšte limit výdajů klíče na OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_open_website">Otevřít OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_error">Překlad OpenRouter selhal (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">Dosažen denní limit MyMemory</string>
-  <string name="morphe_vot_mymemory_quota_next_available">Dostupné opět v %s. </string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Využili jste dnešní bezplatnou kvótu překladů MyMemory (5 000 znaků). Přidejte e-mail MyMemory v nastavení a zvyšte denní limit na 50 000 znaků, nebo přepněte na jinou překladatelskou službu</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Využili jste dnešní kvótu překladů MyMemory (50 000 znaků). Přepněte na jinou překladatelskou službu nebo zkusím zítra</string>
-  <string name="morphe_vot_mymemory_error">Překlad MyMemory selhal (stav %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Povolit smyčku videa</string>
   <string name="morphe_do_not_remember_loop_video_title">Nezapomenout přehrávání videa ve smyčce</string>

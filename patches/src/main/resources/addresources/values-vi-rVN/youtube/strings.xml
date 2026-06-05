@@ -299,59 +299,7 @@ Hạn chế:
 
 Vui lòng kiểm tra lại tên gói và đảm bảo ứng dụng đã được cài trên thiết bị"</string>
   <string name="morphe_external_downloader_empty_warning">Tên gói không được để trống</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Dịch giọng nói</string>
-  <string name="morphe_vot_screen_summary">Đọc to phụ đề video bằng tính năng chuyển văn bản thành giọng nói trên thiết bị, đồng bộ với video</string>
-  <string name="morphe_vot_enabled_title">Dịch giọng nói</string>
-  <string name="morphe_vot_caption_language_title">Ngôn ngữ</string>
-  <string name="morphe_vot_translation_service_title">Dịch vụ dịch thuật</string>
-  <string name="morphe_vot_original_audio_volume_title">Âm lượng âm thanh gốc</string>
-  <string name="morphe_vot_original_audio_volume_summary">Âm lượng của âm thanh gốc trên YouTube khi bản dịch đang phát</string>
-  <string name="morphe_vot_translation_volume_title">Âm lượng bản dịch</string>
-  <string name="morphe_vot_translation_volume_summary">Âm lượng của giọng lồng tiếng bản dịch</string>
-  <string name="morphe_vot_max_speech_rate_title">Tốc độ đọc tối đa</string>
-  <string name="morphe_vot_max_speech_rate_summary">Hệ số tốc độ tối đa khi điều chỉnh giọng nói để khớp thời lượng phụ đề</string>
-  <string name="morphe_vot_mymemory_info_summary">"API dịch miễn phí, không cần khóa API. Tối đa 5.000 ký tự mỗi ngày ở gói miễn phí, hoặc lên tới 50.000 ký tự mỗi ngày nếu có địa chỉ email.
-
-Bấm vào đây để truy cập MyMemory.translated.net"</string>
-  <string name="morphe_vot_mymemory_email_title">Email MyMemory</string>
-  <string name="morphe_vot_mymemory_email_summary">Không bắt buộc. Nhập địa chỉ email MyMemory để tăng giới hạn hàng ngày từ 5.000 lên 50.000 ký tự. Để trống nếu bạn muốn sử dụng giới hạn cho người dùng ẩn danh</string>
-  <string name="morphe_vot_openrouter_info_summary">"Dịch thuật AI trả phí qua OpenRouter. Chỉ cần nạp tiền một lần và dịch hàng nghìn video. Về lựa chọn mô hình, Mistral Nemo là lựa chọn tiết kiệm nhất, trong khi Gemma 4 mang lại chất lượng tốt nhất.
-
-Bấm vào đây để truy cập OpenRouter.ai"</string>
-  <string name="morphe_vot_openrouter_api_key_title">Khóa API OpenRouter</string>
-  <string name="morphe_vot_openrouter_api_key_summary">Nhập khóa API OpenRouter.\nTạo khóa tại OpenRouter.ai &gt; Workspace &gt; API Keys</string>
-  <string name="morphe_vot_openrouter_model_title">Mô hình OpenRouter</string>
-  <string name="morphe_vot_openrouter_model_custom">Tùy chỉnh</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouter chưa được cấu hình</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Nhập khóa API OpenRouter trong cài đặt trước khi chọn dịch vụ này</string>
-  <string name="morphe_vot_cost_free">Miễn phí</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s cho mỗi 100 giờ video</string>
-  <string name="morphe_vot_tts_voice_type">Giọng đọc</string>
-  <string name="morphe_vot_tts_system">Hệ thống</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Giọng nam đa ngôn ngữ</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Giọng nữ đa ngôn ngữ</string>
-  <string name="morphe_vot_voice_gender_male">Nam</string>
-  <string name="morphe_vot_voice_gender_female">Nữ</string>
-  <string name="morphe_vot_tts_sample">Bắt đầu biến đổi!</string>
-  <string name="morphe_vot_http_error_title">Bản dịch không khả dụng</string>
-  <string name="morphe_vot_http_error_message">"Dịch vụ dịch trả về lỗi HTTP %s. Có thể địa chỉ IP của bạn đã bị giới hạn tốc độ truy cập trong tối đa 24 giờ.
-
-Để tiếp tục sử dụng, hãy chọn một dịch vụ dịch khác trong phần Cài đặt hoặc dùng VPN"</string>
-  <string name="morphe_vot_do_not_show_again">Không hiện lại nữa</string>
-  <string name="morphe_vot_export_api_key_warning">"Cài đặt của bạn đang chứa khóa API OpenRouter.
-
-Tuyệt đối không được chia sẻ khoá API. Bởi vì, bất kỳ ai có được nó đều có thể sử dụng số dư OpenRouter của bạn"</string>
-  <string name="morphe_vot_openrouter_credits_title">Đã đạt giới hạn số dư OpenRouter</string>
-  <string name="morphe_vot_openrouter_credits_message">Đã đạt giới hạn sử dụng OpenRouter. Hãy nạp thêm số dư hoặc tăng giới hạn chi tiêu của khóa tại OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_open_website">Truy cập OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_error">Dịch qua OpenRouter thất bại (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">Đã đạt giới hạn dịch hàng ngày của MyMemory</string>
-  <string name="morphe_vot_mymemory_quota_next_available">Có thể thử lại vào lúc %s.</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Bạn đã dùng hết hạn mức dịch miễn phí của MyMemory cho hôm nay (5.000 ký tự). Hãy thêm email MyMemory trong phần Cài đặt để nâng giới hạn hằng ngày lên 50.000 ký tự hoặc chuyển sang dịch vụ dịch khác</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Bạn đã dùng hết hạn mức dịch miễn phí của MyMemory cho hôm nay (5.000 ký tự). Hãy chuyển sang dịch vụ dịch khác hoặc thử lại vào ngày mai</string>
-  <string name="morphe_vot_mymemory_error">Dịch qua MyMemory thất bại (trạng thái %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Bật video lặp lại</string>
   <string name="morphe_do_not_remember_loop_video_title">Không ghi nhớ trạng thái lặp lại video</string>

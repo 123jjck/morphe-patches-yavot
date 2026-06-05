@@ -300,59 +300,7 @@ Limitations :
 
 Vérifiez que le nom de paquet est correct et que l'application est bien installée"</string>
   <string name="morphe_external_downloader_empty_warning">Le nom du paquet ne peut pas être vide</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Traduction en voix off</string>
-  <string name="morphe_vot_screen_summary">Lisez les sous-titres de la vidéo à voix haute à l’aide de la synthèse vocale sur l’appareil, synchronisée avec la lecture</string>
-  <string name="morphe_vot_enabled_title">Traduction en voix off</string>
-  <string name="morphe_vot_caption_language_title">Langue</string>
-  <string name="morphe_vot_translation_service_title">Fournisseur de traduction</string>
-  <string name="morphe_vot_original_audio_volume_title">Volume audio original</string>
-  <string name="morphe_vot_original_audio_volume_summary">Volume de l’audio original YouTube pendant la lecture de la traduction</string>
-  <string name="morphe_vot_translation_volume_title">Volume de la traduction</string>
-  <string name="morphe_vot_translation_volume_summary">Volume de la voix doublée de la traduction</string>
-  <string name="morphe_vot_max_speech_rate_title">Vitesse d\'élocution maximale</string>
-  <string name="morphe_vot_max_speech_rate_summary">Multiplicateur de vitesse maximal lors de l\'adaptation de la parole à un créneau de sous-titres</string>
-  <string name="morphe_vot_mymemory_info_summary">"API de traduction gratuite, aucune clé API requise. Jusqu'à 5,000 caractères par jour avec l'offre gratuite, ou jusqu'à 50,000 caractères par jour avec une adresse e-mail.
-
-Appuyez ici pour ouvrir MyMemory.translated.net"</string>
-  <string name="morphe_vot_mymemory_email_title">E-mail MyMemory</string>
-  <string name="morphe_vot_mymemory_email_summary">Optionnel. Entrez votre adresse e-mail MyMemory pour augmenter la limite quotidienne de 5,000 à 50,000 caractères. Laissez vide pour utiliser la limite anonyme</string>
-  <string name="morphe_vot_openrouter_info_summary">"Traduction IA payante via OpenRouter. Rechargez une seule fois et traduisez des milliers de vidéos. Mistral Nemo est l'option la moins chère, Gemma 4 offre la meilleure qualité.
-
-Appuyez ici pour ouvrir OpenRouter.ai"</string>
-  <string name="morphe_vot_openrouter_api_key_title">Clé d\'API OpenRouter</string>
-  <string name="morphe_vot_openrouter_api_key_summary">Votre clé API OpenRouter. Créez une clé sur OpenRouter.ai &gt; Espace de travail &gt; Clés API</string>
-  <string name="morphe_vot_openrouter_model_title">Modèle OpenRouter</string>
-  <string name="morphe_vot_openrouter_model_custom">Personnalisé</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouter n’est pas configuré</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Entrez votre clé API OpenRouter dans les paramètres avant de sélectionner ce fournisseur</string>
-  <string name="morphe_vot_cost_free">Gratuit</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s pour 100 heures de vidéo</string>
-  <string name="morphe_vot_tts_voice_type">Voix</string>
-  <string name="morphe_vot_tts_system">Système</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Homme multilingue</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Femme multilingue</string>
-  <string name="morphe_vot_voice_gender_male">Homme</string>
-  <string name="morphe_vot_voice_gender_female">Femme</string>
-  <string name="morphe_vot_tts_sample">C’est l’heure de la métamorphose !</string>
-  <string name="morphe_vot_http_error_title">Traduction indisponible</string>
-  <string name="morphe_vot_http_error_message">"Le service de traduction a renvoyé une erreur HTTP %s. Il est probable que votre adresse IP ait été limitée temporairement jusqu’à 24 heures.
-
-Pour continuer à utiliser les traductions, changez de fournisseur de traduction dans les paramètres ou utilisez un VPN"</string>
-  <string name="morphe_vot_do_not_show_again">Ne plus afficher</string>
-  <string name="morphe_vot_export_api_key_warning">"Vos paramètres contiennent une clé API OpenRouter.
-
-Votre clé API ne doit jamais être partagée. Toute personne ayant accès à celle-ci peut utiliser vos crédits OpenRouter"</string>
-  <string name="morphe_vot_openrouter_credits_title">Limite de crédit OpenRouter atteinte</string>
-  <string name="morphe_vot_openrouter_credits_message">Votre limite de crédit OpenRouter a été atteinte. Rechargez votre solde ou augmentez la limite de dépenses de votre clé sur OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_open_website">Ouvrir OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_error">La traduction via OpenRouter a échoué (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">Limite quotidienne de MyMemory atteinte</string>
-  <string name="morphe_vot_mymemory_quota_next_available">Disponible à nouveau le %s.</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Vous avez utilisé le quota gratuit de traduction MyMemory d\'aujourd’hui (5,000 caractères). Ajoutez une adresse e-mail MyMemory dans les paramètres pour porter la limite quotidienne à 50,000 caractères, ou passez à un autre service de traduction</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Vous avez utilisé le quota de traduction MyMemory d\'aujourd’hui (50,000 caractères). Passez à un autre service de traduction ou réessayez demain</string>
-  <string name="morphe_vot_mymemory_error">La traduction via MyMemory a échoué (statut : %s).</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Activer la lecture en boucle</string>
   <string name="morphe_do_not_remember_loop_video_title">Ne pas mémoriser la vidéo en boucle</string>

@@ -300,59 +300,7 @@ Sınırlamalar:
 
 Paket adının doğru olduğunu ve uygulamanın yüklü olduğunu doğrulayın"</string>
   <string name="morphe_external_downloader_empty_warning">Paket adı boş olamaz</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Seslendirme çevirisi</string>
-  <string name="morphe_vot_screen_summary">Cihaz üzerindeki metin-konuşma özelliğini kullanarak video altyazılarını oynatmayla senkronize bir şekilde yüksek sesle okuyun.</string>
-  <string name="morphe_vot_enabled_title">Seslendirme çevirisi</string>
-  <string name="morphe_vot_caption_language_title">Dil</string>
-  <string name="morphe_vot_translation_service_title">Çeviri sağlayıcısı</string>
-  <string name="morphe_vot_original_audio_volume_title">Orijinal ses seviyesi</string>
-  <string name="morphe_vot_original_audio_volume_summary">Çeviri konuşurken orijinal YouTube sesi seviyesi</string>
-  <string name="morphe_vot_translation_volume_title">Çeviri ses seviyesi</string>
-  <string name="morphe_vot_translation_volume_summary">Dublaj yapılan çeviri sesinin seviyesi</string>
-  <string name="morphe_vot_max_speech_rate_title">Maksimum konuşma hızı</string>
-  <string name="morphe_vot_max_speech_rate_summary">Konuşmayı bir altyazı alanına sığdırırken maksimum hız çarpanı</string>
-  <string name="morphe_vot_mymemory_info_summary">"Ücretsiz çeviri API'si, API anahtarı gerekmez. Ücretsiz sürümde günde 5.000 karaktere veya bir e-posta adresiyle günde 50.000 karaktere kadar. 
-
-MyMemory.translated.net'i açmak için buraya dokunun"</string>
-  <string name="morphe_vot_mymemory_email_title">MyMemory e-postası</string>
-  <string name="morphe_vot_mymemory_email_summary">İsteğe bağlı. Günlük limiti 5.000\'den 50.000 karaktere çıkarmak için MyMemory e-posta adresinizi girin. Anonim limiti kullanmak için boş bırakın</string>
-  <string name="morphe_vot_openrouter_info_summary">"OpenRouter üzerinden ücretli yapay zeka çevirisi. Bir kez para yatırın ve binlerce videoyu çevirin. Mistral Nemo en ucuz seçenek, Gemma 4 en yüksek kaliteyi sunar.
-
-OpenRouter.ai'yi açmak için buraya dokunun"</string>
-  <string name="morphe_vot_openrouter_api_key_title">OpenRouter API anahtarı</string>
-  <string name="morphe_vot_openrouter_api_key_summary">OpenRouter API anahtarınız. OpenRouter.ai > Çalışma Alanı > API Anahtarları\'nda bir anahtar oluşturun</string>
-  <string name="morphe_vot_openrouter_model_title">OpenRouter Modeli</string>
-  <string name="morphe_vot_openrouter_model_custom">Özel</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouter yapılandırılmadı</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Bu sağlayıcıyı seçmeden önce ayarlarınızda OpenRouter API anahtarınızı girin</string>
-  <string name="morphe_vot_cost_free">Ücretsiz</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s video saati başına</string>
-  <string name="morphe_vot_tts_voice_type">Ses</string>
-  <string name="morphe_vot_tts_system">Sistem</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Çok dilli erkek</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Çok dilli kadın</string>
-  <string name="morphe_vot_voice_gender_male">Erkek</string>
-  <string name="morphe_vot_voice_gender_female">Kadın</string>
-  <string name="morphe_vot_tts_sample">Dönüşüm zamanı!</string>
-  <string name="morphe_vot_http_error_title">Çeviri kullanılamıyor</string>
-  <string name="morphe_vot_http_error_message">"Çeviri hizmeti HTTP hatası %s döndürdü. IP adresiniz muhtemelen 24 saate kadar oran sınırlandırıldı.
-
-Çevirileri kullanmaya devam etmek için ayarlarınızda farklı bir çeviri sağlayıcısı seçin veya bir VPN kullanın"</string>
-  <string name="morphe_vot_do_not_show_again">Bir daha gösterme</string>
-  <string name="morphe_vot_export_api_key_warning">"Ayarlarınızda bir OpenRouter API anahtarı var.
-
-API anahtarınız asla paylaşılmamalıdır. Ona erişimi olan herkes OpenRouter kredilerinizi kullanabilir"</string>
-  <string name="morphe_vot_openrouter_credits_title">OpenRouter kredi limiti aşıldı</string>
-  <string name="morphe_vot_openrouter_credits_message">OpenRouter kredi limitiniz aşıldı. Bakiyenizi artırın veya OpenRouter.ai adresinde anahtar harcama limitinizi artırın</string>
-  <string name="morphe_vot_openrouter_open_website">OpenRouter.ai\'yi aç</string>
-  <string name="morphe_vot_openrouter_error">OpenRouter çevirisi başarısız oldu (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">MyMemory günlük limiti aşıldı</string>
-  <string name="morphe_vot_mymemory_quota_next_available">Sonraki kullanıma %s tarihinde izin verilecek.</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Bugünün ücretsiz MyMemory çeviri kotasını (5.000 karakter) kullandınız. Günlük limiti 50.000 karaktere çıkarmak için ayarlarınızda bir MyMemory e-postası ekleyin veya farklı bir çeviri hizmetine geçin</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Bugünün MyMemory çeviri kotasını (50.000 karakter) kullandınız. Farklı bir çeviri hizmetine geçin veya yarın tekrar deneyin</string>
-  <string name="morphe_vot_mymemory_error">MyMemory çevirisi başarısız oldu (durum %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Videoyu döngüye almayı etkinleştir</string>
   <string name="morphe_do_not_remember_loop_video_title">Döngü videosunu hatırlama</string>

@@ -293,10 +293,7 @@ Slova iz velikih slova u sredini riječi moraju točno odgovarati (npr: iPhone, 
 
 Potvrdite da naziv paketa je tačan i da je aplikacija instalirana."</string>
   <string name="morphe_external_downloader_empty_warning">Naziv paketa ne može biti prazan</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_openrouter_model_custom">Prilagođeno</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_tts_system">Sustav</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Omogu petljati video</string>
   <string name="morphe_do_not_remember_loop_video_title">Ne pamtim loop video</string>

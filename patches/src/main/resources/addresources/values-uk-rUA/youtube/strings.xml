@@ -300,59 +300,7 @@ Second \"item\" text"</string>
 
 Перевірте, чи правильне ім'я пакета та чи встановлено застосунок"</string>
   <string name="morphe_external_downloader_empty_warning">Ім\'я пакета не може бути порожнім</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Голосовий переклад</string>
-  <string name="morphe_vot_screen_summary">Зачитує субтитри відео вголос за допомогою локального синтезу мовлення, синхронізованого з відтворенням</string>
-  <string name="morphe_vot_enabled_title">Голосовий переклад</string>
-  <string name="morphe_vot_caption_language_title">Мова</string>
-  <string name="morphe_vot_translation_service_title">Постачальник перекладу</string>
-  <string name="morphe_vot_original_audio_volume_title">Гучність оригінального звуку</string>
-  <string name="morphe_vot_original_audio_volume_summary">Гучність оригінального звуку YouTube під час озвучення перекладу</string>
-  <string name="morphe_vot_translation_volume_title">Гучність перекладу</string>
-  <string name="morphe_vot_translation_volume_summary">Гучність озвученого перекладу</string>
-  <string name="morphe_vot_max_speech_rate_title">Максимальна швидкість мовлення</string>
-  <string name="morphe_vot_max_speech_rate_summary">Максимальний коефіцієнт прискорення мовлення для вписування у слот субтитрів</string>
-  <string name="morphe_vot_mymemory_info_summary">"Безкоштовний API перекладу, ключ API не потрібен. До 5 000 символів на день у безкоштовному тарифі, або до 50 000 символів на день із вказаною електронною поштою.
-
-Натисніть тут, щоб відкрити MyMemory.translated.net"</string>
-  <string name="morphe_vot_mymemory_email_title">Електронна пошта MyMemory</string>
-  <string name="morphe_vot_mymemory_email_summary">Необов\'язково. Введіть вашу електронну пошту MyMemory, щоб збільшити денний ліміт із 5 000 до 50 000 символів. Залиште порожнім, щоб використовувати анонімний ліміт</string>
-  <string name="morphe_vot_openrouter_info_summary">"Платний переклад на основі ШІ через OpenRouter. Поповніть баланс один раз і перекладайте тисячі відео. Mistral Nemo - найдешевший варіант, Gemma 4 пропонує найвищу якість.
-
-Натисніть тут, щоб відкрити OpenRouter.ai"</string>
-  <string name="morphe_vot_openrouter_api_key_title">Ключ API OpenRouter</string>
-  <string name="morphe_vot_openrouter_api_key_summary">Ваш ключ API OpenRouter. Створіть ключ на OpenRouter.ai > Workspace > API Keys</string>
-  <string name="morphe_vot_openrouter_model_title">Модель OpenRouter</string>
-  <string name="morphe_vot_openrouter_model_custom">Власна</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouter не налаштовано</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Введіть ваш ключ API OpenRouter у налаштуваннях перед вибором цього постачальника</string>
-  <string name="morphe_vot_cost_free">Безкоштовно</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s за 100 годин відео</string>
-  <string name="morphe_vot_tts_voice_type">Голос</string>
-  <string name="morphe_vot_tts_system">Системний</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Багатомовний чоловічий</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Багатомовний жіночий</string>
-  <string name="morphe_vot_voice_gender_male">Чоловічий</string>
-  <string name="morphe_vot_voice_gender_female">Жіночий</string>
-  <string name="morphe_vot_tts_sample">Час морфінгу!</string>
-  <string name="morphe_vot_http_error_title">Переклад недоступний</string>
-  <string name="morphe_vot_http_error_message">"Сервіс перекладу повернув помилку HTTP %s. Ймовірно, вашу IP-адресу тимчасово обмежено на термін до 24 годин.
-
-Щоб продовжити користуватися перекладом, оберіть іншого постачальника перекладу в налаштуваннях або скористайтеся VPN"</string>
-  <string name="morphe_vot_do_not_show_again">Більше не показувати</string>
-  <string name="morphe_vot_export_api_key_warning">"Ваші налаштування містять ключ API OpenRouter.
-
-Ваш ключ API ніколи не можна передавати іншим. Будь-хто з доступом до нього може використовувати ваші кредити OpenRouter"</string>
-  <string name="morphe_vot_openrouter_credits_title">Досягнуто ліміту кредитів OpenRouter</string>
-  <string name="morphe_vot_openrouter_credits_message">Досягнуто лімітy кредитів OpenRouter. Поповніть баланс або збільшіть ліміт витрат ключа на OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_open_website">Відкрити OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_error">Переклад через OpenRouter не вдався (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">Досягнуто денного ліміту MyMemory</string>
-  <string name="morphe_vot_mymemory_quota_next_available">Доступно знову о %s.</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Ви використали сьогоднішню безкоштовну квоту перекладу MyMemory (5 000 символів). Додайте електронну пошту MyMemory в налаштуваннях, щоб збільшити денний ліміт до 50 000 символів, або оберіть інший сервіс перекладу</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Ви використали сьогоднішню квоту перекладу MyMemory (50 000 символів). Оберіть інший сервіс перекладу або спробуйте знову завтра</string>
-  <string name="morphe_vot_mymemory_error">Переклад через MyMemory не вдався (статус %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Увімкнути повторення відео</string>
   <string name="morphe_do_not_remember_loop_video_title">Не запам\'ятовувати повтор відео</string>

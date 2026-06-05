@@ -49,9 +49,6 @@ import app.morphe.extension.youtube.patches.components.LayoutComponentsFilter.Ex
 import app.morphe.extension.youtube.patches.components.PlayerFlyoutMenuComponentsFilter.HideAudioFlyoutMenuAvailability;
 import app.morphe.extension.youtube.patches.spoof.SpoofVideoStreamsPatch.SpoofClientAv1Availability;
 import app.morphe.extension.youtube.patches.theme.ThemePatch.SplashScreenAnimationStyle;
-import app.morphe.extension.youtube.patches.voiceovertranslation.VoiceOverTranslationPatch;
-import app.morphe.extension.youtube.patches.voiceovertranslation.VoiceOverTranslationPatch.MyMemoryServiceAvailability;
-import app.morphe.extension.youtube.patches.voiceovertranslation.VoiceOverTranslationPatch.OpenRouterServiceAvailability;
 import app.morphe.extension.youtube.sponsorblock.SponsorBlockSettings;
 import app.morphe.extension.youtube.sponsorblock.YouTubeSponsorBlockConfig;
 import app.morphe.extension.youtube.swipecontrols.SwipeControlsConfigurationProvider.SwipeOverlayStyle;
@@ -504,22 +501,6 @@ public class Settings extends SharedYouTubeSettings {
     public static final BooleanSetting SWIPE_LOWEST_VALUE_ENABLE_AUTO_BRIGHTNESS = new BooleanSetting("morphe_swipe_lowest_value_enable_auto_brightness", FALSE, true, parent(SWIPE_BRIGHTNESS));
     public static final IntegerSetting SWIPE_ZONE_WIDTH = new IntegerSetting("morphe_swipe_zone_width", 37, true, parentsAny(SWIPE_BRIGHTNESS, SWIPE_VOLUME));
 
-    // Voice over translation
-    public static final BooleanSetting VOT_ENABLED = new BooleanSetting("morphe_vot_enabled", FALSE, true);
-    public static final BooleanSetting VOT_SESSION_ENABLED = new BooleanSetting("morphe_vot_session_enabled", FALSE);
-    public static final StringSetting VOT_CAPTION_LANGUAGE = new StringSetting("morphe_vot_caption_language", "app", parent(VOT_ENABLED));
-    public static final StringSetting VOT_TTS_VOICE_TYPE = new StringSetting("morphe_vot_tts_voice_type", "auto", parent(VOT_ENABLED));
-    public static final IntegerSetting VOT_ORIGINAL_AUDIO_VOLUME = new IntegerSetting("morphe_vot_original_audio_volume", 50, parent(VOT_ENABLED));
-    public static final IntegerSetting VOT_TRANSLATION_VOLUME = new IntegerSetting("morphe_vot_translation_volume", 100, parent(VOT_ENABLED));
-    public static final IntegerSetting VOT_MAX_SPEECH_RATE = new IntegerSetting("morphe_vot_max_speech_rate", 15, parent(VOT_ENABLED));
-    public static final StringSetting VOT_TRANSLATION_SERVICE = new StringSetting("morphe_vot_translation_service", "google", parent(VOT_ENABLED));
-    public static final StringSetting VOT_OPENROUTER_API_KEY = new StringSetting("morphe_vot_openrouter_api_key", "", new OpenRouterServiceAvailability());
-    public static final StringSetting VOT_OPENROUTER_MODEL = new StringSetting("morphe_vot_openrouter_model", "mistralai/mistral-nemo", new OpenRouterServiceAvailability());
-    public static final StringSetting VOT_MYMEMORY_EMAIL = new StringSetting("morphe_vot_mymemory_email", "", new MyMemoryServiceAvailability());
-    public static final BooleanSetting VOT_USE_NATIVE_TTS = new BooleanSetting("morphe_vot_use_native_tts", FALSE, parent(VOT_ENABLED));
-    public static final BooleanSetting VOT_SHOW_HTTP_ERROR_DIALOG = new BooleanSetting("morphe_vot_show_http_error_dialog", TRUE);
-    public static final BooleanSetting VOT_HIDE_EXPORT_WARNING = new BooleanSetting("morphe_vot_hide_export_warning", FALSE, false, false);
-
     // ReturnYoutubeDislike
     public static final BooleanSetting RYD_ENABLED = new BooleanSetting("morphe_ryd_enabled", TRUE);
     public static final StringSetting RYD_USER_ID = new StringSetting("morphe_ryd_user_id", "", false, false);
@@ -579,6 +560,17 @@ public class Settings extends SharedYouTubeSettings {
     // Dummy setting. Category is not exposed in the UI nor does it ever change.
     public static final StringSetting SB_CATEGORY_UNSUBMITTED = new StringSetting("morphe_sb_unsubmitted", SKIP_AUTOMATICALLY.morpheKeyValue, false, false);
     public static final StringSetting SB_CATEGORY_UNSUBMITTED_COLOR = new StringSetting("morphe_sb_unsubmitted_color", "#FFFFFFFF", false, false);
+
+    // Voice Over Translation
+    public static final BooleanSetting VOT_ENABLED = new BooleanSetting("morphe_vot_enabled", FALSE);
+    public static final StringSetting VOT_SOURCE_LANGUAGE = new StringSetting("morphe_vot_source_language", "auto", false, parent(VOT_ENABLED));
+    public static final StringSetting VOT_TARGET_LANGUAGE = new StringSetting("morphe_vot_target_language", "ru", false, parent(VOT_ENABLED));
+    public static final IntegerSetting VOT_TRANSLATION_VOLUME = new IntegerSetting("morphe_vot_translation_volume", 100, false, parent(VOT_ENABLED));
+    public static final IntegerSetting VOT_ORIGINAL_AUDIO_VOLUME = new IntegerSetting("morphe_vot_original_audio_volume", 30, false, parent(VOT_ENABLED));
+    public static final BooleanSetting VOT_AUDIO_PROXY_ENABLED = new BooleanSetting("morphe_vot_audio_proxy_enabled", TRUE, false, parent(VOT_ENABLED));
+    public static final StringSetting VOT_PROXY_URL = new StringSetting("morphe_vot_proxy_url", "vot-worker.eu.cc", false, parent(VOT_ENABLED));
+    public static final BooleanSetting VOT_USE_LIVE_VOICES = new BooleanSetting("morphe_vot_use_live_voices", TRUE, false, parent(VOT_ENABLED));
+    public static final StringSetting VOT_OAUTH_TOKEN = new StringSetting("morphe_vot_oauth_token", "", false, parent(VOT_ENABLED));
 
     // Migration
     private static final BooleanSetting DEPRECATED_BYPASS_URL_REDIRECTS = new BooleanSetting("morphe_bypass_url_redirects", TRUE);
@@ -722,7 +714,6 @@ public class Settings extends SharedYouTubeSettings {
         }
 
         Setting.addImportExportCallback(SponsorBlockSettings.SB_IMPORT_EXPORT_CALLBACK);
-        Setting.addImportExportCallback(VoiceOverTranslationPatch.VOT_IMPORT_EXPORT_CALLBACK);
 
         // Must run before any code reads a SegmentCategory setting.
         YouTubeSponsorBlockConfig.install();
@@ -751,11 +742,7 @@ public class Settings extends SharedYouTubeSettings {
                 5, 75, 1, "%"));
         SeekBarPreference.register(new SeekBarConfig(QUICK_ACTIONS_TOP_MARGIN,
                 0, 32, 1, "dp"));
-        SeekBarPreference.register(new SeekBarConfig(VOT_ORIGINAL_AUDIO_VOLUME,
-                0, 100, 10, "%"));
-        SeekBarPreference.register(new SeekBarConfig(VOT_TRANSLATION_VOLUME,
-                0, 100, 10, "%"));
-        SeekBarPreference.register(new SeekBarConfig(VOT_MAX_SPEECH_RATE,
-                10, 25, 1, "x", 10));
+        SeekBarPreference.register(new SeekBarConfig(VOT_TRANSLATION_VOLUME, 0, 100, 5, "%"));
+        SeekBarPreference.register(new SeekBarConfig(VOT_ORIGINAL_AUDIO_VOLUME, 0, 100, 5, "%"));
     }
 }

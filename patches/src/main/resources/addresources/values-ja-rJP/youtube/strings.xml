@@ -300,59 +300,7 @@ Second \"item\" text"</string>
 
 パッケージ名が正しいこと、およびアプリがインストールされていることを確認してください"</string>
   <string name="morphe_external_downloader_empty_warning">パッケージ名は空欄にはできません</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">吹き替え翻訳</string>
-  <string name="morphe_vot_screen_summary">動画字幕を翻訳し、デバイス上のテキスト読み上げ機能で字幕の翻訳を字幕に同期しながら読み上げます</string>
-  <string name="morphe_vot_enabled_title">吹き替え翻訳</string>
-  <string name="morphe_vot_caption_language_title">言語</string>
-  <string name="morphe_vot_translation_service_title">翻訳サービス</string>
-  <string name="morphe_vot_original_audio_volume_title">動画の音量</string>
-  <string name="morphe_vot_original_audio_volume_summary">吹き替え音声を再生しているときの YouTube 動画の音量</string>
-  <string name="morphe_vot_translation_volume_title">吹き替えの音量</string>
-  <string name="morphe_vot_translation_volume_summary">吹き替え音声の音量</string>
-  <string name="morphe_vot_max_speech_rate_title">吹き替え音声の加速上限</string>
-  <string name="morphe_vot_max_speech_rate_summary">吹き替え元の字幕に同期するために吹き替え音声を加速して再生する際の上限値</string>
-  <string name="morphe_vot_mymemory_info_summary">"無料の翻訳API。APIキーは不要です。無料プランでは1日あたり最大5,000文字、またはEメールアドレスを使用すると1日あたり最大50,000文字です。
-
-MyMemory.translated.netを開くには、ここをタップしてください"</string>
-  <string name="morphe_vot_mymemory_email_title">MyMemoryメールアドレス</string>
-  <string name="morphe_vot_mymemory_email_summary">オプション。毎日の制限を5,000文字から50,000文字に増やすには、MyMemoryのEメールアドレスを入力してください。空のままにすると、匿名制限が使用されます</string>
-  <string name="morphe_vot_openrouter_info_summary">"OpenRouterによる有料AI翻訳。一度チャージすれば、数千本のビデオを翻訳できます。Mistral Nemoが最も安価なオプションであり、Gemma 4が最高の品質を提供します。
-
-OpenRouter.aiを開くには、ここをタップしてください"</string>
-  <string name="morphe_vot_openrouter_api_key_title">OpenRouter APIキー</string>
-  <string name="morphe_vot_openrouter_api_key_summary">OpenRouter API キーです。OpenRouter.ai > Workspace > API Keys でキーを作成してください</string>
-  <string name="morphe_vot_openrouter_model_title">OpenRouterモデル</string>
-  <string name="morphe_vot_openrouter_model_custom">カスタム</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouterが構成されていません</string>
-  <string name="morphe_vot_openrouter_not_configured_message">このプロバイダーを選択する前に、設定でOpenRouter APIキーを入力してください</string>
-  <string name="morphe_vot_cost_free">無料</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">100ビデオ時間あたり%s</string>
-  <string name="morphe_vot_tts_voice_type">音声</string>
-  <string name="morphe_vot_tts_system">システム</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">多言語男性</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">多言語女性</string>
-  <string name="morphe_vot_voice_gender_male">男性</string>
-  <string name="morphe_vot_voice_gender_female">女性</string>
-  <string name="morphe_vot_tts_sample">変身する時間だ！</string>
-  <string name="morphe_vot_http_error_title">翻訳できません</string>
-  <string name="morphe_vot_http_error_message">"翻訳サービスはHTTPエラー%sを返しました。あなたのIPアドレスは最大24時間レート制限されている可能性があります。
-
-翻訳を継続するには、設定で別の翻訳プロバイダーに切り替えたり、VPNを使用してください"</string>
-  <string name="morphe_vot_do_not_show_again">今後表示しない</string>
-  <string name="morphe_vot_export_api_key_warning">"設定にOpenRouter APIキーが含まれています。
-
-APIキーは決して共有しないでください。アクセス権を持つ人は誰でもOpenRouterのクレジットを使用できます"</string>
-  <string name="morphe_vot_openrouter_credits_title">OpenRouterクレジット制限に達しました</string>
-  <string name="morphe_vot_openrouter_credits_message">OpenRouterクレジット制限に達しました。OpenRouter.aiで残高をチャージするか、キーの支出制限を増やしてください</string>
-  <string name="morphe_vot_openrouter_open_website">OpenRouter.aiを開く</string>
-  <string name="morphe_vot_openrouter_error">OpenRouter翻訳が失敗しました（HTTP %s）</string>
-  <string name="morphe_vot_mymemory_quota_title">MyMemoryの毎日の制限に達しました</string>
-  <string name="morphe_vot_mymemory_quota_next_available">次の利用可能時間は%sです</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">今日の無料MyMemory翻訳枠（5,000文字）を超えました。設定でMyMemoryのEメールアドレスを追加して、毎日の制限を50,000文字に増やすか、別の翻訳サービスに切り替えてください</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">今日のMyMemory翻訳枠（50,000文字）を超えました。別の翻訳サービスに切り替え、または明日もう一度お試しください</string>
-  <string name="morphe_vot_mymemory_error">MyMemory が翻訳に失敗しました (status %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">動画のループ再生を有効化</string>
   <string name="morphe_do_not_remember_loop_video_title">「動画のループ再生」を保存しない</string>
