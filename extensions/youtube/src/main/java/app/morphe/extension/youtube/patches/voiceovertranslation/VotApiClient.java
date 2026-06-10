@@ -47,10 +47,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -181,7 +184,10 @@ public class VotApiClient {
             String videoTitle, boolean useLiveVoices, boolean firstRequest
     ) {
         // Proactively ensure a valid session exists before any API call.
-        ensureSession();
+        if (!ensureSession()) {
+            Logger.printDebug(() -> "VOT: unable to establish session, network may be unavailable");
+            return null;
+        }
 
         String cacheKey = videoUrl + "|" + sourceLang + "|" + targetLang + "|" + useLiveVoices;
         CachedResult cached = translationCache.get(cacheKey);
@@ -434,6 +440,15 @@ public class VotApiClient {
             } finally {
                 connection.disconnect();
             }
+        } catch (UnknownHostException e) {
+            Logger.printException(() -> "VOT createSession failed: DNS resolution error for " + YANDEX_API_HOST, e);
+            return false;
+        } catch (SocketTimeoutException e) {
+            Logger.printException(() -> "VOT createSession failed: connection timeout", e);
+            return false;
+        } catch (ConnectException e) {
+            Logger.printException(() -> "VOT createSession failed: connection refused", e);
+            return false;
         } catch (Exception e) {
             Logger.printException(() -> "VOT createSession failed", e);
             return false;
@@ -479,12 +494,18 @@ public class VotApiClient {
             } finally {
                 conn.disconnect();
             }
+        } catch (UnknownHostException | SocketTimeoutException | ConnectException e) {
+            Logger.printDebug(() -> "VOT OAuth token validation: network error (" +
+                    e.getClass().getSimpleName() + "), assuming valid temporarily");
+            // Network is unreachable — assume valid to avoid blocking the user,
+            // but DON'T cache so we re-validate when the network recovers.
+            return true;
         } catch (Exception e) {
             Logger.printDebug(() -> "VOT OAuth token validation failed: " + e.getMessage());
-            // On network error, assume valid so we don't block the user.
+            // Unknown error — cache as invalid to prevent repeated failures.
             lastValidatedToken = token;
-            tokenIsValid = true;
-            return true;
+            tokenIsValid = false;
+            return false;
         }
     }
 
