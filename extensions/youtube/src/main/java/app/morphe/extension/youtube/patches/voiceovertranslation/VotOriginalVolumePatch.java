@@ -55,6 +55,13 @@ public final class VotOriginalVolumePatch {
     private static volatile WeakReference<AudioTrack> lastAudioTrackRef = new WeakReference<>(null);
     private static volatile float lastBaseVolume = 1.0f;
 
+    /**
+     * Guard flag — true while {@link #applyCurrentMultiplierNow(int)} is calling
+     * {@link AudioTrack#setVolume(float)}. Prevents the bytecode hook from
+     * double-applying the VOT multiplier (once in applyMultiplier, once in the hook).
+     */
+    private static volatile boolean applyingNow = false;
+
     private static float applyMultiplier(float volume) {
         return applyMultiplier(volume, Settings.VOT_ORIGINAL_AUDIO_VOLUME.get());
     }
@@ -80,6 +87,10 @@ public final class VotOriginalVolumePatch {
      * @return volume * (VOT_ORIGINAL_AUDIO_VOLUME/100) when translation playing, else unchanged
      */
     public static float applyVolumeMultiplier(AudioTrack audioTrack, float volume) {
+        // Short-circuit: applyCurrentMultiplierNow is calling setVolume with an
+        // already-adjusted value — don't double-apply the multiplier.
+        if (applyingNow) return volume;
+
         if (audioTrack != null) {
             lastAudioTrackRef = new WeakReference<>(audioTrack);
         }
@@ -114,11 +125,14 @@ public final class VotOriginalVolumePatch {
         if (base < 0f) base = 0f;
         if (base > 1f) base = 1f;
         float adjusted = applyMultiplier(base, volumePercent);
+        applyingNow = true;
         try {
             audioTrack.setVolume(adjusted);
             return true;
         } catch (Exception ignored) {
             return false;
+        } finally {
+            applyingNow = false;
         }
     }
 }

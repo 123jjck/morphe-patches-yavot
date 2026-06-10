@@ -895,6 +895,10 @@ public class VoiceOverTranslationPatch {
             applyPlaybackSpeedToPlayer(mp);
             mp.start();
             isPaused = false;
+            // Re-apply VOT volume multiplier — during pause the original volume
+            // may have been reset to full by the player (isTranslationActive
+            // returns false while paused, so the setVolume hook doesn't duck).
+            refreshOriginalAudioVolume();
         } catch (Exception ignored) { }
     }
 

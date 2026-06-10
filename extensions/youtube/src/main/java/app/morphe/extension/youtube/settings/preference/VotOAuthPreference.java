@@ -62,6 +62,7 @@ import org.json.JSONObject;
 
 import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.Utils;
+import app.morphe.extension.shared.settings.preference.SelfManagedPreference;
 import app.morphe.extension.shared.ui.CustomDialog;
 import app.morphe.extension.youtube.patches.voiceovertranslation.VotApiClient;
 import app.morphe.extension.youtube.patches.voiceovertranslation.VotAuthWebViewDialog;
@@ -75,7 +76,7 @@ import app.morphe.extension.youtube.settings.Settings;
  * When signed in, clicking shows account info with options to sign out or switch token.
  */
 @SuppressWarnings("deprecation")
-public class VotOAuthPreference extends Preference implements Preference.OnPreferenceClickListener {
+public class VotOAuthPreference extends Preference implements Preference.OnPreferenceClickListener, SelfManagedPreference {
 
     /** Cached profile display name (static to survive preference recreation). */
     @Nullable
