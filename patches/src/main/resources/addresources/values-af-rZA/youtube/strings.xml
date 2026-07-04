@@ -300,59 +300,7 @@ Beperkings:
 
 Vind die pakketnaam en maak seker dat die app geïnstalleer is"</string>
   <string name="morphe_external_downloader_empty_warning">Die pakketnaam kan nie leeg wees nie</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Vertaalde stem over</string>
-  <string name="morphe_vot_screen_summary">Lees video-onderskrifte hardop voor met behulp van teks-na-spraak op die toestel, gesinkroniseer met die afspeel</string>
-  <string name="morphe_vot_enabled_title">Vertaalde stem oor</string>
-  <string name="morphe_vot_caption_language_title">Taal</string>
-  <string name="morphe_vot_translation_service_title">Dienstverskaffer vir vertaling</string>
-  <string name="morphe_vot_original_audio_volume_title">Volume van die oorspronklike klank</string>
-  <string name="morphe_vot_original_audio_volume_summary">Volume van die oorspronklike YouTube-klank terwyl die vertaling praat</string>
-  <string name="morphe_vot_translation_volume_title">Vertalingsvolume</string>
-  <string name="morphe_vot_translation_volume_summary">Volume van die vertaalde stem</string>
-  <string name="morphe_vot_max_speech_rate_title">Maksimum spraakspoed</string>
-  <string name="morphe_vot_max_speech_rate_summary">Maksimum snelheidvermenigvuldiger wanneer spraak in \'n ondertitelgleuf pas</string>
-  <string name="morphe_vot_mymemory_info_summary">"Gratis vertaling-API, geen API-sleutel vereis nie. Tot 5,000 karakters per dag op die gratis vlak, of tot 50,000 karakters per dag met 'n e-posadres.
-
-Tik hier om MyMemory.translated.net oop te maak"</string>
-  <string name="morphe_vot_mymemory_email_title">MyMemory e-pos</string>
-  <string name="morphe_vot_mymemory_email_summary">Opsioneel. Voer jou MyMemory e-posadres in om die daaglikse limiet van 5,000 tot 50,000 karakters te verhoog. Laat leeg om die anonieme limiet te gebruik</string>
-  <string name="morphe_vot_openrouter_info_summary">"Betaalde AI-vertaling via OpenRouter. Vul een keer aan en vertaal duisende video's. Mistral Nemo is die goedkoopste opsie, Gemma 4 bied die hoogste kwaliteit.
-
-Tik hier om OpenRouter.ai oop te maak"</string>
-  <string name="morphe_vot_openrouter_api_key_title">OpenRouter API-sleutel</string>
-  <string name="morphe_vot_openrouter_api_key_summary">Jou OpenRouter API-sleutel. Skep \'n sleutel by OpenRouter.ai > Werkspasie > API-sleutels</string>
-  <string name="morphe_vot_openrouter_model_title">OpenRouter-model</string>
-  <string name="morphe_vot_openrouter_model_custom">Pasgemaak</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouter nie gekonfigureer nie</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Voer jou OpenRouter API-sleutel in instellings in voordat jy hierdie verskaffer kies</string>
-  <string name="morphe_vot_cost_free">Gratis</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s per 100 video-ure</string>
-  <string name="morphe_vot_tts_voice_type">Stem</string>
-  <string name="morphe_vot_tts_system">Stelsel</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Veeltalige manlik</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Veeltalige vroulik</string>
-  <string name="morphe_vot_voice_gender_male">Manlik</string>
-  <string name="morphe_vot_voice_gender_female">Vroulik</string>
-  <string name="morphe_vot_tts_sample">Dit is metamorfose tyd!</string>
-  <string name="morphe_vot_http_error_title">Vertaling nie beskikbaar nie</string>
-  <string name="morphe_vot_http_error_message">"Die vertaaldienstes het HTTP-fout %s teruggegee. Jou IP-adres is waarskynlik vir tot 24 uur beperk.
-
-Om aan te hou om vertalings te gebruik, skakel na 'n ander vertaaldienstes in instellings of gebruik 'n VPN"</string>
-  <string name="morphe_vot_do_not_show_again">Moenie weer wys nie</string>
-  <string name="morphe_vot_export_api_key_warning">"Jou instellings bevat 'n OpenRouter API-sleutel.
-
-Jou API-sleutel moet nooit gedeel word nie. Enigeen met toegang daartoe kan jou OpenRouter-krediete gebruik"</string>
-  <string name="morphe_vot_openrouter_credits_title">OpenRouter-kredietlimiet bereik</string>
-  <string name="morphe_vot_openrouter_credits_message">Jou OpenRouter-kredietlimiet is bereik. Vul jou saldo aan of verhoog jou sleutelbestedingslimiet by OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_open_website">Open OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_error">OpenRouter-vertaling misluk (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">MyMemory daaglikse limiet bereik</string>
-  <string name="morphe_vot_mymemory_quota_next_available">Volgende beskikbaar om %s.</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Jy het vandag se gratis MyMemory-vertaalquotum (5,000 karakters) gebruik. Voeg \'n MyMemory-e-pos in instellings in om die daaglikse limiet te verhoog tot 50,000 karakters, of skakel na \'n ander vertaaldienstes</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Jy het vandag se MyMemory-vertaalquotum (50,000 karakters) gebruik. Skakel na \'n ander vertaaldienstes of probeer môre weer</string>
-  <string name="morphe_vot_mymemory_error">MyMemory-vertaling misluk (status %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Aktiveer lusvideo</string>
   <string name="morphe_do_not_remember_loop_video_title">Moenie lusvideo onthou nie</string>

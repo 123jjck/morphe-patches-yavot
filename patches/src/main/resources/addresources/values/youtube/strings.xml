@@ -329,67 +329,6 @@ Limitations:
 Verify the package name is correct and the app is installed"</string>
     <string name="morphe_external_downloader_empty_warning">The package name cannot be empty</string>
 
-    <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-    <string name="morphe_vot_screen_title">Voice over translation</string>
-    <string name="morphe_vot_screen_summary">Read video captions aloud using on-device text-to-speech, synchronized with playback</string>
-    <string name="morphe_vot_enabled_title">Voice over translation</string>
-    <string name="morphe_vot_caption_language_title">Language</string>
-    <string name="morphe_vot_translation_service_title">Translation provider</string>
-    <string name="morphe_vot_original_audio_volume_title">Original audio volume</string>
-    <string name="morphe_vot_original_audio_volume_summary">Volume of the original YouTube audio while the translation is speaking</string>
-    <string name="morphe_vot_translation_volume_title">Translation volume</string>
-    <string name="morphe_vot_translation_volume_summary">Volume of the dubbed translation voice</string>
-    <string name="morphe_vot_max_speech_rate_title">Max speech rate</string>
-    <string name="morphe_vot_max_speech_rate_summary">Maximum speed multiplier when fitting speech into a subtitle slot</string>
-    <string name="morphe_vot_service_google" translatable="false">Google Translate</string>
-    <string name="morphe_vot_service_mymemory" translatable="false">MyMemory</string>
-    <string name="morphe_vot_mymemory_info_summary">"Free translation API, no API key required. Up to 5,000 characters per day on the free tier, or up to 50,000 characters per day with an email address.
-
-Tap here to open MyMemory.translated.net"</string>
-    <string name="morphe_vot_mymemory_email_title">MyMemory email</string>
-    <string name="morphe_vot_mymemory_email_summary">Optional. Enter your MyMemory email address to increase the daily limit from 5,000 to 50,000 characters. Leave empty to use the anonymous limit</string>
-    <string name="morphe_vot_service_openrouter" translatable="false">OpenRouter</string>
-    <string name="morphe_vot_openrouter_info_summary">"Paid AI translation via OpenRouter. Top up once and translate thousands of videos. Mistral Nemo is the cheapest option, Gemma 4 offers the highest quality.
-
-Tap here to open OpenRouter.ai"</string>
-    <string name="morphe_vot_openrouter_api_key_title">OpenRouter API key</string>
-    <string name="morphe_vot_openrouter_api_key_summary">Your OpenRouter API key. Create a key at OpenRouter.ai > Workspace > API Keys</string>
-    <string name="morphe_vot_openrouter_model_title">OpenRouter Model</string>
-    <string name="morphe_vot_openrouter_model_mistral_nemo" translatable="false">Mistral Nemo</string>
-    <string name="morphe_vot_openrouter_model_gemma4_26b_a4b" translatable="false">Gemma 4</string>
-    <string name="morphe_vot_openrouter_model_deepseek_flash_v4" translatable="false">DeepSeek V4 Flash</string>
-    <string name="morphe_vot_openrouter_model_custom">Custom</string>
-    <string name="morphe_vot_openrouter_model_hint" translatable="false">e.g. qwen/qwen3.5-flash-02-23</string>
-    <string name="morphe_vot_openrouter_not_configured_title">OpenRouter not configured</string>
-    <string name="morphe_vot_openrouter_not_configured_message">Enter your OpenRouter API key in settings before selecting this provider</string>
-    <string name="morphe_vot_cost_free">Free</string>
-    <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-    <string name="morphe_vot_cost_per_hour">%s per 100 video hours</string>
-    <string name="morphe_vot_tts_voice_type">Voice</string>
-    <string name="morphe_vot_tts_system">System</string>
-    <string name="morphe_vot_voice_gender_male_multilingual">Multilingual male</string>
-    <string name="morphe_vot_voice_gender_female_multilingual">Multilingual female</string>
-    <string name="morphe_vot_voice_gender_male">Male</string>
-    <string name="morphe_vot_voice_gender_female">Female</string>
-    <string name="morphe_vot_tts_sample">It\'s morphing time!</string>
-    <string name="morphe_vot_http_error_title">Translation unavailable</string>
-    <string name="morphe_vot_http_error_message">"The translation service returned HTTP error %s. Your IP address has likely been rate-limited for up to 24 hours.
-
-To continue using translations, switch to a different translation provider in settings or use a VPN"</string>
-    <string name="morphe_vot_do_not_show_again">Do not show again</string>
-    <string name="morphe_vot_export_api_key_warning">"Your settings contain an OpenRouter API key.
-
-Your API key should never be shared. Anyone with access to it can use your OpenRouter credits"</string>
-    <string name="morphe_vot_openrouter_credits_title">OpenRouter credit limit reached</string>
-    <string name="morphe_vot_openrouter_credits_message">Your OpenRouter credit limit has been reached. Top up your balance or increase your key spending limit at OpenRouter.ai</string>
-    <string name="morphe_vot_openrouter_open_website">Open OpenRouter.ai</string>
-    <string name="morphe_vot_openrouter_error">OpenRouter translation failed (HTTP %s)</string>
-    <string name="morphe_vot_mymemory_quota_title">MyMemory daily limit reached</string>
-    <string name="morphe_vot_mymemory_quota_next_available">Next available at %s.</string>
-    <string name="morphe_vot_mymemory_quota_message_no_email">You\'ve used today\'s free MyMemory translation quota (5,000 characters). Add a MyMemory email in settings to raise the daily limit to 50,000 characters, or switch to a different translation service</string>
-    <string name="morphe_vot_mymemory_quota_message_with_email">You\'ve used today\'s MyMemory translation quota (50,000 characters). Switch to a different translation service or try again tomorrow</string>
-    <string name="morphe_vot_mymemory_error">MyMemory translation failed (status %s)</string>
-
     <!-- interaction.loop.loopVideoPatch -->
     <string name="morphe_loop_video_title">Enable loop video</string>
     <string name="morphe_do_not_remember_loop_video_title">Don\'t remember loop video</string>
@@ -1251,4 +1190,67 @@ Video playback with AV1 may stutter or drop frames."</string>
     <string name="morphe_restore_old_video_action_bar_summary">"Fixes dislikes not shown and video action buttons cannot be hidden
 
 Limitations: Reverts to old style 'More videos' overlay"</string>
+
+    <!-- Voice Over Translation -->
+    <string name="morphe_settings_screen_13_voice_over_translation_title">Voice Over Translation</string>
+    <string name="morphe_vot_enabled_title">Enable Voice Over Translation</string>
+    <string name="morphe_vot_enabled_summary">Yandex voice-over translation</string>
+    <string name="morphe_vot_enabled_summary_on">Yandex voice-over translation is enabled</string>
+    <string name="morphe_vot_enabled_summary_off">Yandex voice-over translation is disabled</string>
+    <string name="morphe_vot_source_language_title">Source language</string>
+    <string name="morphe_vot_source_language_summary">Select the language of the video audio</string>
+    <string name="morphe_vot_target_language_title">Target language</string>
+    <string name="morphe_vot_target_language_summary">Select the language to translate to</string>
+    <string name="morphe_vot_translation_volume_title">Translation volume</string>
+    <string name="morphe_vot_translation_volume_summary">Volume of the translated audio track (0-100). Default: 100</string>
+    <string name="morphe_vot_original_audio_volume_title">Original audio volume</string>
+    <string name="morphe_vot_original_audio_volume_summary">Volume of the original video track when translation is playing (0-100). Default: 30</string>
+    <string name="morphe_vot_audio_proxy_title">Proxy audio stream</string>
+    <string name="morphe_vot_audio_proxy_enabled_summary">Enable only if Yandex servers are unreachable</string>
+    <string name="morphe_vot_audio_proxy_summary">Enable only if Yandex servers are unreachable</string>
+    <string name="morphe_vot_audio_proxy_summary_on">Audio is routed through a proxy worker</string>
+    <string name="morphe_vot_audio_proxy_summary_off">Audio is downloaded directly from Yandex servers</string>
+    <string name="morphe_vot_proxy_url_title">Proxy server</string>
+    <string name="morphe_vot_proxy_url_summary">VOT worker proxy host. Default: vot-worker.eu.cc</string>
+    <string name="morphe_vot_use_live_voices_title">Live voices</string>
+    <string name="morphe_vot_use_live_voices_summary">Use natural-sounding voices from Yandex</string>
+    <string name="morphe_vot_use_live_voices_summary_on">Natural-sounding voices from Yandex</string>
+    <string name="morphe_vot_use_live_voices_summary_off">Standard TTS voices</string>
+    <string name="morphe_vot_voice_style_title">Voice-over style</string>
+    <string name="morphe_vot_voice_style_standard">Standard</string>
+    <string name="morphe_vot_voice_style_live">Live</string>
+    <string name="morphe_vot_started">Translation started</string>
+    <string name="morphe_vot_stopped">Translation stopped</string>
+    <string name="morphe_vot_playback_error">Failed to play translation audio</string>
+    <string name="morphe_vot_unavailable_live">Translation is not available for live streams</string>
+    <string name="morphe_vot_unavailable_too_long">Video is too long for translation (max 4 hours)</string>
+    <string name="morphe_vot_unavailable_same_language">Video audio is already in the target language</string>
+    <string name="morphe_vot_stream_waiting">Waiting… ~%s</string>
+    <string name="morphe_vot_stream_waiting_status">Translation requested, check back later</string>
+    <string name="morphe_vot_stream_not_ready">Translation not ready. Use the button to enable when ready.</string>
+    <string name="morphe_vot_stream_requesting">Requesting translation for stream…</string>
+    <string name="morphe_vot_stream_ready">Translation ready, playing</string>
+    <string name="morphe_vot_time_sec">%d sec</string>
+    <string name="morphe_vot_time_min">%d min</string>
+    <string name="morphe_vot_live_voices_unavailable">Live voices unavailable, using standard</string>
+    <string name="morphe_vot_lang_auto">Auto-detect</string>
+    <string name="morphe_vot_oauth_token_title">Yandex OAuth token</string>
+    <string name="morphe_vot_oauth_token_summary">Required for live voices.</string>
+    <string name="morphe_vot_auth_required">Authorization required. Add Yandex OAuth token in Morphe settings.</string>
+    <!-- VOT OAuth preference strings -->
+    <string name="morphe_vot_oauth_not_signed_in_summary">Not authorized</string>
+    <string name="morphe_vot_oauth_signed_in_summary">Signed in as %s</string>
+    <string name="morphe_vot_oauth_auth_method_title">Yandex authorization</string>
+    <string name="morphe_vot_oauth_auth_method_message">Choose authorization method</string>
+    <string name="morphe_vot_oauth_sign_in_button">Sign in with Yandex</string>
+    <string name="morphe_vot_oauth_enter_manually_button">Enter token manually</string>
+    <string name="morphe_vot_oauth_sign_out_button">Sign out</string>
+    <string name="morphe_vot_oauth_switch_token_button">Use another token</string>
+    <string name="morphe_vot_oauth_enter_token_title">Enter token manually</string>
+    <string name="morphe_vot_oauth_webview_title">Yandex authorization</string>
+    <string name="morphe_vot_oauth_auth_declined">Authorization declined</string>
+    <string name="morphe_vot_oauth_invalid_token">Invalid token</string>
+    <string name="morphe_vot_oauth_no_network">No network connection</string>
+    <string name="morphe_vot_oauth_account_management_title">Yandex OAuth token</string>
+
 </resources>

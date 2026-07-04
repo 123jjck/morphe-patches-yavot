@@ -5,11 +5,12 @@ import androidx.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.Utils;
-import app.morphe.extension.youtube.patches.voiceovertranslation.VoiceOverTranslationPatch;
 import app.morphe.extension.youtube.shared.Event;
 import app.morphe.extension.youtube.shared.ShortsPlayerState;
 import app.morphe.extension.youtube.shared.VideoState;
@@ -66,6 +67,7 @@ public final class VideoInformation {
     private static String channelId = "";
     private static String channelName = "";
     private static String videoId = "";
+    private static String videoTitle = "";
     private static long videoLength = 0;
 
     private static volatile String playerResponsePlaylistId = "";
@@ -77,6 +79,7 @@ public final class VideoInformation {
      * The current playback speed
      */
     private static float playbackSpeed = DEFAULT_YOUTUBE_PLAYBACK_SPEED;
+    private static final List<Runnable> playbackSpeedChangeListeners = new CopyOnWriteArrayList<>();
 
     private static int desiredVideoResolution = AUTOMATIC_VIDEO_QUALITY_VALUE;
 
@@ -110,6 +113,10 @@ public final class VideoInformation {
      * Fires whenever a new channel ID is extracted for the current video.
      */
     public static final Event<String> onChannelIdChange = new Event<>();
+
+    public static void addOnPlaybackSpeedChangeListener(Runnable listener) {
+        if (listener != null) playbackSpeedChangeListeners.add(listener);
+    }
 
     @Nullable
     public static VideoQualityInterface[] getCurrentQualities() {
@@ -315,7 +322,6 @@ public final class VideoInformation {
                 Logger.printDebug(() -> "Cannot seekTo because player controller is null");
             } else {
                 if (controller.patch_seekTo(adjustedSeekTime)) {
-                    VoiceOverTranslationPatch.onVideoSeeked();
                     return true;
                 }
                 Logger.printDebug(() -> "seekTo did not succeeded. Trying MXD.");
@@ -337,9 +343,7 @@ public final class VideoInformation {
                 return false;
             }
 
-            final boolean mdxSeekSuccessful = controller.patch_seekTo(adjustedSeekTime);
-            if (mdxSeekSuccessful) VoiceOverTranslationPatch.onVideoSeeked();
-            return mdxSeekSuccessful;
+            return controller.patch_seekTo(adjustedSeekTime);
         } catch (Exception ex) {
             Logger.printException(() -> "seekTo failure", ex);
             return false;
@@ -524,6 +528,12 @@ public final class VideoInformation {
      */
     public static void overridePlaybackSpeed(float speedOverride) {
         Logger.printDebug(() -> "Overriding playback speed to: " + speedOverride);
+        if (playbackSpeed != speedOverride) {
+            playbackSpeed = speedOverride;
+            for (Runnable r : playbackSpeedChangeListeners) {
+                try { r.run(); } catch (Exception e) { Logger.printException(() -> "Playback speed listener", e); }
+            }
+        }
     }
 
     /**
@@ -535,6 +545,9 @@ public final class VideoInformation {
         if (playbackSpeed != newlyLoadedPlaybackSpeed) {
             Logger.printDebug(() -> "Video speed changed: " + newlyLoadedPlaybackSpeed);
             playbackSpeed = newlyLoadedPlaybackSpeed;
+            for (Runnable r : playbackSpeedChangeListeners) {
+                try { r.run(); } catch (Exception e) { Logger.printException(() -> "Playback speed listener", e); }
+            }
         }
     }
 
@@ -675,4 +688,18 @@ public final class VideoInformation {
         String qualityName = quality.patch_getQualityName();
         return qualityName != null && qualityName.contains(VIDEO_QUALITY_PREMIUM_NAME);
     }
+
+    public static void setVideoTitle(String title) {
+        videoTitle = title != null ? title : "";
+        Logger.printDebug(() -> "Video title: " + videoTitle);
+    }
+
+    @NonNull
+    public static String getVideoTitle() { return videoTitle; }
+
+    public static float getPlaybackSpeedFromPlayer() { return -1f; }
+
+    public static float getPlayerVolume() { return 1.0f; }
+
+    public static void setPlayerVolume(float volume) { }
 }

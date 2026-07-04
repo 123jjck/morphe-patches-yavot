@@ -300,59 +300,7 @@ Mga Limitasyon:
 
 Suriin kung tama ang pangalan ng package at naka-install ang app"</string>
   <string name="morphe_external_downloader_empty_warning">Hindi maaaring walang laman ang pangalan ng package</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Pagsasalin ng boses</string>
-  <string name="morphe_vot_screen_summary">Basahin nang malakas ang mga caption ng video gamit ang text-to-speech sa iyong device, na naka-synchronize sa pagpapatugtog</string>
-  <string name="morphe_vot_enabled_title">Pagsasalin ng boses</string>
-  <string name="morphe_vot_caption_language_title">Wika</string>
-  <string name="morphe_vot_translation_service_title">Tagapagbigay ng pagsasalin</string>
-  <string name="morphe_vot_original_audio_volume_title">Dami ng orihinal na audio</string>
-  <string name="morphe_vot_original_audio_volume_summary">Dami ng orihinal na audio ng YouTube habang nagsasalita ang pagsasalin</string>
-  <string name="morphe_vot_translation_volume_title">Dami ng pagsasalin</string>
-  <string name="morphe_vot_translation_volume_summary">Dami ng dubbed na boses ng pagsasalin</string>
-  <string name="morphe_vot_max_speech_rate_title">Pinakamataas na bilis ng pagsasalita</string>
-  <string name="morphe_vot_max_speech_rate_summary">Pinakamataas na multiplier ng bilis kapag umaangkop sa pagsasalita sa isang slot ng subtitle</string>
-  <string name="morphe_vot_mymemory_info_summary">"Libreng API ng pagsasalin, walang kinakailangang API key. Hanggang 5,000 karakter bawat araw sa libreng tier, o hanggang 50,000 karakter bawat araw gamit ang isang email address.
-
-I-tap dito upang buksan ang MyMemory.translated.net"</string>
-  <string name="morphe_vot_mymemory_email_title">Email ng MyMemory</string>
-  <string name="morphe_vot_mymemory_email_summary">Opsyonal. Ipasok ang iyong email address ng MyMemory upang madagdagan ang pang-araw-araw na limitasyon mula 5,000 hanggang 50,000 karakter. Iwanang blangko upang gamitin ang limitasyon ng anonymous</string>
-  <string name="morphe_vot_openrouter_info_summary">"Bayad na AI pagsasalin sa pamamagitan ng OpenRouter. Mag-top up nang isang beses at isalin ang libu-libong video. Ang Mistral Nemo ang pinakamurang opsyon, ang Gemma 4 ay nag-aalok ng pinakamataas na kalidad.
-
-I-tap dito upang buksan ang OpenRouter.ai"</string>
-  <string name="morphe_vot_openrouter_api_key_title">API key ng OpenRouter</string>
-  <string name="morphe_vot_openrouter_api_key_summary">Ang iyong API key ng OpenRouter. Gumawa ng key sa OpenRouter.ai > Workspace > API Keys</string>
-  <string name="morphe_vot_openrouter_model_title">Modelo ng OpenRouter</string>
-  <string name="morphe_vot_openrouter_model_custom">Pasadya</string>
-  <string name="morphe_vot_openrouter_not_configured_title">Hindi naka-configure ang OpenRouter</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Ipasok ang iyong API key ng OpenRouter sa mga setting bago piliin ang tagapagbigay na ito</string>
-  <string name="morphe_vot_cost_free">Libre</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s bawat 100 oras ng video</string>
-  <string name="morphe_vot_tts_voice_type">Boses</string>
-  <string name="morphe_vot_tts_system">Sistema</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Multilingual na lalaki</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Multilingual na babae</string>
-  <string name="morphe_vot_voice_gender_male">Lalaki</string>
-  <string name="morphe_vot_voice_gender_female">Babae</string>
-  <string name="morphe_vot_tts_sample">Panahon na para magbago!</string>
-  <string name="morphe_vot_http_error_title">Hindi magagamit ang pagsasalin</string>
-  <string name="morphe_vot_http_error_message">"Ang serbisyo ng pagsasalin ay nagbalik ng HTTP error %s. Malamang na nalimitahan ang iyong IP address sa loob ng hanggang 24 na oras.
-
-Upang magpatuloy sa paggamit ng mga pagsasalin, lumipat sa ibang tagapagbigay ng pagsasalin sa mga setting o gumamit ng VPN"</string>
-  <string name="morphe_vot_do_not_show_again">Huwag nang ipakita muli</string>
-  <string name="morphe_vot_export_api_key_warning">"Mayroong API key ng OpenRouter sa iyong mga setting.
-
-Hindi dapat ibahagi ang iyong API key. Sinumang may access dito ay maaaring gumamit ng iyong mga kredito ng OpenRouter"</string>
-  <string name="morphe_vot_openrouter_credits_title">Naabot na ang limitasyon ng kredito ng OpenRouter</string>
-  <string name="morphe_vot_openrouter_credits_message">Naabot mo na ang iyong limitasyon ng kredito ng OpenRouter. Mag-top up ng iyong balanse o taasan ang iyong limitasyon sa paggastos ng key sa OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_open_website">Buksan ang OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_error">Nabigo ang pagsasalin ng OpenRouter (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">Naabot na ang pang-araw-araw na limitasyon ng MyMemory</string>
-  <string name="morphe_vot_mymemory_quota_next_available">Available muli sa %s.</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Ginagamit mo na ang pang-araw-araw na libreng quota ng pagsasalin ng MyMemory (5,000 character). Magdagdag ng email ng MyMemory sa mga setting upang itaas ang pang-araw-araw na limitasyon sa 50,000 character, o lumipat sa ibang serbisyo ng pagsasalin</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Ginagamit mo na ang quota ng pagsasalin ng MyMemory ngayong araw (50,000 character). Lumipat sa ibang serbisyo ng pagsasalin o subukan muli bukas</string>
-  <string name="morphe_vot_mymemory_error">Nabigo ang pagsasalin ng MyMemory (status %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">I-enable ang loop video</string>
   <string name="morphe_do_not_remember_loop_video_title">Huwag tandaan ang pag-uulit ng video</string>

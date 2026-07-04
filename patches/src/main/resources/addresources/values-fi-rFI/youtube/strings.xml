@@ -300,59 +300,7 @@ Rajoitukset:
 
 Tarkista, että paketin nimi on oikein ja sovellus on asennettu"</string>
   <string name="morphe_external_downloader_empty_warning">Paketin nimi ei voi olla tyhjä</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Ääniratateksti</string>
-  <string name="morphe_vot_screen_summary">Lue videon tekstitykset ääneen laitteen tekstistä puheeksi -toiminnolla, synkronoitu toiston kanssa</string>
-  <string name="morphe_vot_enabled_title">Ääniratateksti</string>
-  <string name="morphe_vot_caption_language_title">Kieli</string>
-  <string name="morphe_vot_translation_service_title">Käännöspalvelun tarjoaja</string>
-  <string name="morphe_vot_original_audio_volume_title">Alkuperäisen äänenvoimakkuus</string>
-  <string name="morphe_vot_original_audio_volume_summary">Alkuperäisen YouTube-äänen voimakkuus käännöksen puhuessa</string>
-  <string name="morphe_vot_translation_volume_title">Käännöksen äänenvoimakkuus</string>
-  <string name="morphe_vot_translation_volume_summary">Dubatun käännöksen äänen voimakkuus</string>
-  <string name="morphe_vot_max_speech_rate_title">Suurin puhenopeus</string>
-  <string name="morphe_vot_max_speech_rate_summary">Suurin nopeuden kerroin, kun puhe sovitetaan tekstityskohtaan</string>
-  <string name="morphe_vot_mymemory_info_summary">"Ilmainen käännöspalvelu, API-avainta ei vaadita. Jopa 5 000 merkkiä päivässä ilmaisversiossa tai jopa 50 000 merkkiä päivässä sähköpostiosoitteella.
-
-Napauta tästä avataksesi MyMemory.translated.net"</string>
-  <string name="morphe_vot_mymemory_email_title">MyMemory-sähköposti</string>
-  <string name="morphe_vot_mymemory_email_summary">Valinnainen. Anna MyMemory-sähköpostiosoitteesi nostaaksesi päivittäisen rajan 5 000:sta 50 000 merkkiin. Jätä tyhjäksi käyttääksesi anonyymirajoitusta</string>
-  <string name="morphe_vot_openrouter_info_summary">"Maksullinen AI-käännös OpenRouterin kautta. Lisää rahaa kerran ja käännä tuhansia videoita. Mistral Nemo on halvin vaihtoehto, Gemma 4 tarjoaa korkeimman laadun.
-
-Napauta tästä avataksesi OpenRouter.ai"</string>
-  <string name="morphe_vot_openrouter_api_key_title">OpenRouter API -avain</string>
-  <string name="morphe_vot_openrouter_api_key_summary">OpenRouter API -avain. Luo avain osoitteessa OpenRouter.ai > Workspace > API Keys</string>
-  <string name="morphe_vot_openrouter_model_title">OpenRouter-malli</string>
-  <string name="morphe_vot_openrouter_model_custom">Mukautettu</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouteria ei ole määritetty</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Syötä OpenRouter API -avain asetuksiin ennen tämän palveluntarjoajan valitsemista</string>
-  <string name="morphe_vot_cost_free">Ilmainen</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s per 100 videotuntia</string>
-  <string name="morphe_vot_tts_voice_type">Ääni</string>
-  <string name="morphe_vot_tts_system">Järjestelmä</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Monikielinen mies</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Monikielinen nainen</string>
-  <string name="morphe_vot_voice_gender_male">Mies</string>
-  <string name="morphe_vot_voice_gender_female">Nainen</string>
-  <string name="morphe_vot_tts_sample">Muodonmuutos alkaa!</string>
-  <string name="morphe_vot_http_error_title">Käännöstä ei ole saatavilla</string>
-  <string name="morphe_vot_http_error_message">"Käännöspalvelu palautti HTTP-virheen %s. IP-osoitteesi on todennäköisesti rajoitettu enintään 24 tunniksi.
-
-Jatkaaksesi käännösten käyttöä, vaihda toiseen käännöspalveluntarjoajaan asetuksissa tai käytä VPN:ää."</string>
-  <string name="morphe_vot_do_not_show_again">Älä näytä uudelleen</string>
-  <string name="morphe_vot_export_api_key_warning">"Asetuksissasi on OpenRouter API -avain.
-
-API-avaintasi ei saa koskaan jakaa. Kuka tahansa, jolla on pääsy siihen, voi käyttää OpenRouter-saldoasi."</string>
-  <string name="morphe_vot_openrouter_credits_title">OpenRouter-saldoa ei ole enää</string>
-  <string name="morphe_vot_openrouter_credits_message">OpenRouter-saldo on loppu. Lisää saldoa tai nosta avaimen kulutusrajaa osoitteessa OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_open_website">Avaa OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_error">OpenRouter-käännöksessä virhe (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">MyMemoryn päivittäinen raja on saavutettu</string>
-  <string name="morphe_vot_mymemory_quota_next_available">Saatavilla seuraavan kerran %s.</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Olet käyttänyt tämän päivän ilmaisen MyMemory-käännöskiintiön (5 000 merkkiä). Lisää MyMemory-sähköpostiosoite asetuksiin nostaaksesi päivittäisen rajan 50 000 merkkiin tai vaihda toiseen käännöspalveluun</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Olet käyttänyt tämän päivän MyMemory-käännöskiintiön (50 000 merkkiä). Vaihda toiseen käännöspalveluun tai yritä uudelleen huomenna</string>
-  <string name="morphe_vot_mymemory_error">MyMemory-käännöksessä virhe (tila %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Ota jatkuva toisto käyttöön</string>
   <string name="morphe_do_not_remember_loop_video_title">Älä muista silmukoitua videota</string>

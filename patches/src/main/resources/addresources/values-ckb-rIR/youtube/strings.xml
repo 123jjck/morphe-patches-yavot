@@ -164,11 +164,7 @@ Second \"item\" text"</string>
   <string name="morphe_external_downloader_screen_title">دانه‌کانی دەرەکی</string>
   <!-- 'Download action button' should match the language used in 'morphe_hide_download_button_title'. -->
   <string name="morphe_external_downloader_other_item">دوان</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_openrouter_model_custom">باو</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_tts_system">سیستەم</string>
-  <string name="morphe_vot_do_not_show_again">نیشانی مەدەوە دووبارە</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">ڤیدیۆ دوبارەبوونەوە چالاک بکە</string>
   <!-- interaction.loop.loopVideoButtonPatch -->

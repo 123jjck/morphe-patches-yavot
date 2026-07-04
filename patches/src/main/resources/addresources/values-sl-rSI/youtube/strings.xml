@@ -300,59 +300,7 @@ Omejitve:
 
 Preverite, ali je ime paketa pravilno in ali je aplikacija nameščena"</string>
   <string name="morphe_external_downloader_empty_warning">Ime paketa ne sme biti prazno</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Prevajanje z glasom</string>
-  <string name="morphe_vot_screen_summary">Prebiranje napisov videoposnetka v glas z uporabo pretvorbe besedila v govor v napravi, sinhronizirano s predvajanjem</string>
-  <string name="morphe_vot_enabled_title">Prevajanje z glasom</string>
-  <string name="morphe_vot_caption_language_title">Jezik</string>
-  <string name="morphe_vot_translation_service_title">Ponudnik prevodov</string>
-  <string name="morphe_vot_original_audio_volume_title">Glasnost originalnega zvoka</string>
-  <string name="morphe_vot_original_audio_volume_summary">Glasnost originalnega zvoka YouTube med predvajanjem prevoda</string>
-  <string name="morphe_vot_translation_volume_title">Glasnost prevoda</string>
-  <string name="morphe_vot_translation_volume_summary">Glasnost sinhroniziranega prevoda</string>
-  <string name="morphe_vot_max_speech_rate_title">Maksimalna hitrost govora</string>
-  <string name="morphe_vot_max_speech_rate_summary">Največji množitelj hitrosti govora pri prilagajanju govora časovnemu pasu podnapisov</string>
-  <string name="morphe_vot_mymemory_info_summary">"Brezplačni prevajalski API, ni potrebna API ključ. Do 5.000 znakov na dan v brezplačni različici ali do 50.000 znakov na dan z e-poštnim naslovom.
-
-Tapnite tukaj, da odprete MyMemory.translated.net"</string>
-  <string name="morphe_vot_mymemory_email_title">MyMemory e-pošta</string>
-  <string name="morphe_vot_mymemory_email_summary">Neobvezno. Vnesite svoj e-poštni naslov MyMemory, da povečate dnevno omejitev s 5.000 na 50.000 znakov. Pustite prazno, če želite uporabiti anonimno omejitev</string>
-  <string name="morphe_vot_openrouter_info_summary">"Plačljiv prevod z umetno inteligenco prek OpenRouter. Napolnite enkrat in prevedite na tisoče videoposnetkov. Mistral Nemo je najcenejša možnost, Gemma 4 pa ponuja najvišjo kakovost.
-
-Tapnite tukaj, da odprete OpenRouter.ai"</string>
-  <string name="morphe_vot_openrouter_api_key_title">API ključ OpenRouter</string>
-  <string name="morphe_vot_openrouter_api_key_summary">Vaš API ključ OpenRouter. Ustvarite ključ na OpenRouter.ai > Workspace > API Keys</string>
-  <string name="morphe_vot_openrouter_model_title">Model OpenRouter</string>
-  <string name="morphe_vot_openrouter_model_custom">Prilagoditve</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouter ni konfiguriran</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Vnesite svoj API ključ OpenRouter v nastavitvah, preden izberete tega ponudnika</string>
-  <string name="morphe_vot_cost_free">Brezplačno</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s na 100 ur videa</string>
-  <string name="morphe_vot_tts_voice_type">Glas</string>
-  <string name="morphe_vot_tts_system">Sistem</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Večjezični moški</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Večjezična ženska</string>
-  <string name="morphe_vot_voice_gender_male">Moški</string>
-  <string name="morphe_vot_voice_gender_female">Ženska</string>
-  <string name="morphe_vot_tts_sample">Čas preoblikovanja!</string>
-  <string name="morphe_vot_http_error_title">Prevod ni na voljo</string>
-  <string name="morphe_vot_http_error_message">"Prevodna služba je vrnila HTTP napako %s. Vaš IP naslov je verjetno omejen za do 24 ur.
-
-Za nadaljevanje uporabljajte prevode, preklopite na drugega prevajalskega ponudnika v nastavitvah ali uporabite VPN"</string>
-  <string name="morphe_vot_do_not_show_again">Ne prikaži več</string>
-  <string name="morphe_vot_export_api_key_warning">"Vaše nastavitve vsebujejo API ključ OpenRouter.
-
-Vaš API ključ nikoli ne smete deliti. Kdorkoli, ki ima dostop do njega, lahko uporabi vaše kredite OpenRouter"</string>
-  <string name="morphe_vot_openrouter_credits_title">Dosežena omejitev kreditov OpenRouter</string>
-  <string name="morphe_vot_openrouter_credits_message">Dosegli ste omejitev kreditov OpenRouter. Napolnite svoje stanje ali povečajte omejitev porabe ključa na OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_open_website">Odprite OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_error">Napaka pri prevajanju OpenRouter (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">Dosežena dnevna omejitev MyMemory</string>
-  <string name="morphe_vot_mymemory_quota_next_available">Na voljo spet ob %s.</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Uporabili ste današnjo brezplačno kvoto za prevod MyMemory (5.000 znakov). Dodajte e-poštni naslov MyMemory v nastavitvah, da povečate dnevno omejitev na 50.000 znakov, ali preklopite na drugo prevajalsko službo</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Uporabili ste današnjo kvoto za prevod MyMemory (50.000 znakov). Preklopite na drugo prevajalsko službo ali poskusite znova jutri</string>
-  <string name="morphe_vot_mymemory_error">Napaka pri prevajanju MyMemory (status %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Omogoči zanko videa</string>
   <string name="morphe_do_not_remember_loop_video_title">Ne zapomni ponavljajoæi videoposnetek</string>

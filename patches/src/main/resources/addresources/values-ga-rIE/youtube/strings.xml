@@ -300,59 +300,7 @@ Teorainneacha:
 
 Fíoraigh go bhfuil ainm an phacáiste ceart agus go bhfuil an aip suiteáilte"</string>
   <string name="morphe_external_downloader_empty_warning">Ní féidir ainm an phacáiste a fhágáil folamh</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Aistriúchán gutha</string>
-  <string name="morphe_vot_screen_summary">Léigh fotheidil físe os ard ag baint úsáide as téacs-go-hurlabhra ar an ngléas, sioncrónaithe le hathsheinm</string>
-  <string name="morphe_vot_enabled_title">Aistriúchán gutha</string>
-  <string name="morphe_vot_caption_language_title">Teanga</string>
-  <string name="morphe_vot_translation_service_title">Soláthraí aistriúcháin</string>
-  <string name="morphe_vot_original_audio_volume_title">An toirt fuaime bunaidh</string>
-  <string name="morphe_vot_original_audio_volume_summary">Toirt an fhuaime bhunaidh YouTube agus an t-aistriúchán á labhairt</string>
-  <string name="morphe_vot_translation_volume_title">Toirt aistriúcháin</string>
-  <string name="morphe_vot_translation_volume_summary">Toirt an ghlór aistriúcháin dubáilte</string>
-  <string name="morphe_vot_max_speech_rate_title">Uasráta cainte</string>
-  <string name="morphe_vot_max_speech_rate_summary">Iolraitheoir uasta luais agus cainte á cur isteach i sliotán fotheideal</string>
-  <string name="morphe_vot_mymemory_info_summary">"API aistriúcháin saor in aisce, níl aon eochair API ag teastáil. Suas le 5,000 carachtar in aghaidh an lae ar an leibhéal saor in aisce, nó suas le 50,000 carachtar in aghaidh an lae le seoladh ríomhphoist.
-
-Tapáil anseo chun MyMemory.translated.net a oscailt"</string>
-  <string name="morphe_vot_mymemory_email_title">Ríomhphost MyMemory</string>
-  <string name="morphe_vot_mymemory_email_summary">Roghnach. Cuir isteach do sheoladh ríomhphoist MyMemory chun an teorainn laethúil a mhéadú ó 5,000 go 50,000 carachtar. Fág folamh chun an teorainn gan ainm a úsáid.</string>
-  <string name="morphe_vot_openrouter_info_summary">"Aistriúchán AI íoctha trí OpenRouter. Barr suas uair amháin agus aistrigh na mílte físeán. Is é Mistral Nemo an rogha is saoire, agus cuireann Gemma 4 an caighdeán is airde ar fáil.
-
-Tapáil anseo chun OpenRouter.ai a oscailt."</string>
-  <string name="morphe_vot_openrouter_api_key_title">Eochair API OpenRouter</string>
-  <string name="morphe_vot_openrouter_api_key_summary">D\'eochair API OpenRouter. Cruthaigh eochair ag OpenRouter.ai &gt; Spás Oibre &gt; Eochracha API</string>
-  <string name="morphe_vot_openrouter_model_title">Samhail OpenRouter</string>
-  <string name="morphe_vot_openrouter_model_custom">Saincheaptha</string>
-  <string name="morphe_vot_openrouter_not_configured_title">Níl OpenRouter cumraithe</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Cuir isteach d’eochair API OpenRouter sna socruithe sula roghnaíonn tú an soláthraí seo</string>
-  <string name="morphe_vot_cost_free">Saor in aisce</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s in aghaidh gach 100 uair an chloig físe</string>
-  <string name="morphe_vot_tts_voice_type">Guth</string>
-  <string name="morphe_vot_tts_system">Córas</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Fireann ilteangach</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Bean ilteangach</string>
-  <string name="morphe_vot_voice_gender_male">Fireann</string>
-  <string name="morphe_vot_voice_gender_female">Baineann</string>
-  <string name="morphe_vot_tts_sample">Tá sé in am morphing!</string>
-  <string name="morphe_vot_http_error_title">Aistriúchán ar fáil</string>
-  <string name="morphe_vot_http_error_message">"D’fhill an tseirbhís aistriúcháin earráid HTTP %s. Is dócha go bhfuil teorainn ráta curtha le do sheoladh IP ar feadh suas le 24 uair an chloig.
-
-Chun leanúint ar aghaidh ag úsáid aistriúcháin, aistrigh chuig soláthraí aistriúcháin difriúil sna socruithe nó bain úsáid as VPN."</string>
-  <string name="morphe_vot_do_not_show_again">Ná taispeáin arís</string>
-  <string name="morphe_vot_export_api_key_warning">"Tá eochair API OpenRouter i do shocruithe.
-
-Níor cheart d'eochair API a roinnt choíche. Is féidir le duine ar bith a bhfuil rochtain aige uirthi do chreidmheasanna OpenRouter a úsáid."</string>
-  <string name="morphe_vot_openrouter_credits_title">Teorainn chreidmheasa OpenRouter sroichte</string>
-  <string name="morphe_vot_openrouter_credits_message">Tá do theorainn chreidmheasa OpenRouter sroichte. Cuir barr le d’iarmhéid nó méadaigh do phríomhtheorainn caiteachais ag OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_open_website">Oscail OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_error">Theip ar aistriúchán OpenRouter (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">Teorainn laethúil MyMemory sroichte</string>
-  <string name="morphe_vot_mymemory_quota_next_available">Ar fáil ag %s an chéad cheann eile.</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Tá cuóta aistriúcháin saor in aisce MyMemory (5,000 carachtar) úsáidte agat inniu. Cuir ríomhphost MyMemory leis sna socruithe chun an teorainn laethúil a ardú go 50,000 carachtar, nó aistrigh chuig seirbhís aistriúcháin eile.</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Tá cuóta aistriúcháin MyMemory (50,000 carachtar) úsáidte agat inniu. Athraigh chuig seirbhís aistriúcháin eile nó déan iarracht arís amárach.</string>
-  <string name="morphe_vot_mymemory_error">Theip ar aistriúchán MyMemory (stádas %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Cumasaigh físeán lúbtha</string>
   <string name="morphe_do_not_remember_loop_video_title">Ná cuir i gcuimhne físeán lúpa</string>

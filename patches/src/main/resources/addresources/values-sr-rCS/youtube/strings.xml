@@ -300,59 +300,7 @@ Ograničenja:
 
 Proverite da li je naziv paketa ispravan i da li je aplikacija instalirana"</string>
   <string name="morphe_external_downloader_empty_warning">Naziv paketa ne može biti prazan</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Prevod sinhronizovane titlova</string>
-  <string name="morphe_vot_screen_summary">Učita titlove iz videa i izgovara ih pomoću ugrađenog pretvarača teksta u govor, sinhronizovano sa reprodukcijom</string>
-  <string name="morphe_vot_enabled_title">Prevod sinhronizovane titlova</string>
-  <string name="morphe_vot_caption_language_title">Jezik</string>
-  <string name="morphe_vot_translation_service_title">Провајдер превода</string>
-  <string name="morphe_vot_original_audio_volume_title">Гласноћа оригиналног звука</string>
-  <string name="morphe_vot_original_audio_volume_summary">Гласноћа оригиналног YouTube звука док се превод изговара</string>
-  <string name="morphe_vot_translation_volume_title">Гласноћа превода</string>
-  <string name="morphe_vot_translation_volume_summary">Гласноћа гласа у синхронизованом преводу</string>
-  <string name="morphe_vot_max_speech_rate_title">Максимална брзина говора</string>
-  <string name="morphe_vot_max_speech_rate_summary">Максимални мултипликатор брзине прилагођавања говора према слоту за титилове</string>
-  <string name="morphe_vot_mymemory_info_summary">"Бесплатан API за превод, није потребан API кључ. До 5.000 знакова дневно у бесплатној верзији, или до 50.000 знакова дневно уз адресу е-поште.
-
-Додирните овде да бисте отворили MyMemory.translated.net"</string>
-  <string name="morphe_vot_mymemory_email_title">MyMemory е-пошта</string>
-  <string name="morphe_vot_mymemory_email_summary">Опционо. Унесите своју MyMemory е-адресу да бисте повећали дневни лимит са 5.000 на 50.000 знакова. Оставите празно да бисте користили анонимни лимит</string>
-  <string name="morphe_vot_openrouter_info_summary">"Плаћиви AI превод преко OpenRouter-а. Допуните једном и преводите хиљаде видео снимака. Mistral Nemo је најјефтинија опција, Gemma 4 нуди највиши квалитет.
-
-Додирните овде да бисте отворили OpenRouter.ai"</string>
-  <string name="morphe_vot_openrouter_api_key_title">OpenRouter API кључ</string>
-  <string name="morphe_vot_openrouter_api_key_summary">Ваш OpenRouter API кључ. Направите кључ на OpenRouter.ai > Workspace > API Keys</string>
-  <string name="morphe_vot_openrouter_model_title">OpenRouter модел</string>
-  <string name="morphe_vot_openrouter_model_custom">Прилагођено</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouter није конфигурисан</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Унесите свој OpenRouter API кључ у подешавањима пре него што одаберете овог добављача</string>
-  <string name="morphe_vot_cost_free">Бесплатно</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s по 100 сати видеа</string>
-  <string name="morphe_vot_tts_voice_type">Глас</string>
-  <string name="morphe_vot_tts_system">Sistem</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Мушки, мултилингвални</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Женски, мултилингвални</string>
-  <string name="morphe_vot_voice_gender_male">Мушки</string>
-  <string name="morphe_vot_voice_gender_female">Женски</string>
-  <string name="morphe_vot_tts_sample">Време трансформације!</string>
-  <string name="morphe_vot_http_error_title">Превод није доступан</string>
-  <string name="morphe_vot_http_error_message">"Преводна услуга је вратила HTTP грешку %s. Ваша IP адреса је вероватно ограничена за до 24 сата.
-
-Да бисте наставили са коришћењем превода, пређите на другог добављача превода у подешавањима или користите VPN"</string>
-  <string name="morphe_vot_do_not_show_again">Ne prikazuj ponovo</string>
-  <string name="morphe_vot_export_api_key_warning">"Ваша подешавања садрже OpenRouter API кључ.
-
-Ваш API кључ никада не треба делити. Свако ко има приступ њему може користити ваше OpenRouter кредите"</string>
-  <string name="morphe_vot_openrouter_credits_title">Досегнут је лимит кредита за OpenRouter</string>
-  <string name="morphe_vot_openrouter_credits_message">Досегнут је ваш OpenRouter лимит кредита. Допуните баланс или повећајте лимит трошења кључа на OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_open_website">Отвори OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_error">Грешка превода OpenRouter (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">Досегнут је дневни лимит MyMemory-ја</string>
-  <string name="morphe_vot_mymemory_quota_next_available">Следеће доступно у %s.</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Искористили сте данашњу бесплатну квоту за превод MyMemory-ја (5.000 знакова). Додајте MyMemory е-пошту у подешавањима да бисте повећали дневни лимит на 50.000 знакова, или пређите на другу преводну услугу</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Искористили сте данашњу квоту за превод MyMemory-ја (50.000 знакова). Пређите на другу преводну услугу или покушајте поново сутра</string>
-  <string name="morphe_vot_mymemory_error">Грешка превода MyMemory-ја (статус %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Omogući ponavljanje videa</string>
   <string name="morphe_do_not_remember_loop_video_title">Ne pamti petlju videa</string>

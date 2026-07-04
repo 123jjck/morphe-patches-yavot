@@ -269,10 +269,7 @@ Second \"item\" text"</string>
 
 Проверете дали името на пакетот е правилно и дали апликацијата е инсталирана"</string>
   <string name="morphe_external_downloader_empty_warning">Името на пакетот не може да биде празно</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_openrouter_model_custom">По нарачка</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_tts_system">Систем</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Вклучи повторување на видеото</string>
   <string name="morphe_do_not_remember_loop_video_title">Не се сеќавам видео во повторување</string>

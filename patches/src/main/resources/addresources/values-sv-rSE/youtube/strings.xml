@@ -253,11 +253,7 @@ Vissa layouter på serversidan kanske inte återställs.
 
 Kontrollera att paketnamnet är korrekt och att appen är installerad"</string>
   <string name="morphe_external_downloader_empty_warning">Paketnamnet får inte vara tomt</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_openrouter_model_custom">Anpassad</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_tts_system">System</string>
-  <string name="morphe_vot_do_not_show_again">Visa inte igen</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Aktivera videoslinga</string>
   <!-- interaction.loop.loopVideoButtonPatch -->

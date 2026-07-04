@@ -300,59 +300,7 @@ Korlátozások:
 
 Ellenőrizze, hogy a csomagnév helyes-e, és az alkalmazás telepítve van-e."</string>
   <string name="morphe_external_downloader_empty_warning">A csomagnév nem lehet üres</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Hangfelirat hangos felolvasása</string>
-  <string name="morphe_vot_screen_summary">Olvassa fel a videó feliratait hangosan a készüléken található szöveg-beszéddé alakító segítségével, szinkronban a lejátszással.</string>
-  <string name="morphe_vot_enabled_title">Hangfelirat hangos felolvasása</string>
-  <string name="morphe_vot_caption_language_title">Nyelv</string>
-  <string name="morphe_vot_translation_service_title">Fordítási szolgáltató</string>
-  <string name="morphe_vot_original_audio_volume_title">Az eredeti hang hangereje</string>
-  <string name="morphe_vot_original_audio_volume_summary">Az eredeti YouTube hang hangereje a fordítás közben</string>
-  <string name="morphe_vot_translation_volume_title">A fordítás hangereje</string>
-  <string name="morphe_vot_translation_volume_summary">A szinkronizált fordítás hangjának hangereje</string>
-  <string name="morphe_vot_max_speech_rate_title">Maximális beszédsebesség</string>
-  <string name="morphe_vot_max_speech_rate_summary">A maximális sebesség szorzója, amikor a beszédet egy felirat helyére illesztjük</string>
-  <string name="morphe_vot_mymemory_info_summary">"Ingyenes fordítási API, API kulcsra nincs szükség. Naponta akár 5000 karakter a díjmentes verzióban, vagy akár 50000 karakter e-mail címmel. 
-
-Érintse meg ide a MyMemory.translated.net megnyitásához"</string>
-  <string name="morphe_vot_mymemory_email_title">MyMemory e-mail cím</string>
-  <string name="morphe_vot_mymemory_email_summary">Nem kötelező. Adja meg MyMemory e-mail címét a napi korlát 5000-ről 50000 karakterre növeléséhez. Hagyja üresen az anonim korlát használatához</string>
-  <string name="morphe_vot_openrouter_info_summary">"Fizetős AI fordítás az OpenRouteren keresztül. Töltsön fel egyszer, és fordítson több ezer videót. A Mistral Nemo a legolcsóbb opció, a Gemma 4 a legjobb minőséget kínálja.
-
-Érintse meg ide az OpenRouter.ai megnyitásához"</string>
-  <string name="morphe_vot_openrouter_api_key_title">OpenRouter API kulcs</string>
-  <string name="morphe_vot_openrouter_api_key_summary">Az OpenRouter API kulcsa. Hozzon létre egy kulcsot az OpenRouter.ai oldalon a Workspace > API Keys területen</string>
-  <string name="morphe_vot_openrouter_model_title">OpenRouter modell</string>
-  <string name="morphe_vot_openrouter_model_custom">Egyedi</string>
-  <string name="morphe_vot_openrouter_not_configured_title">Az OpenRouter nincs konfigurálva</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Adja meg az OpenRouter API kulcsát a beállításokban, mielőtt kiválasztja ezt a szolgáltatót</string>
-  <string name="morphe_vot_cost_free">Ingyenes</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s dollár 100 videóóra esetén</string>
-  <string name="morphe_vot_tts_voice_type">Hang</string>
-  <string name="morphe_vot_tts_system">Rendszer</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Többnyelvű férfi</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Többnyelvű női</string>
-  <string name="morphe_vot_voice_gender_male">Férfi</string>
-  <string name="morphe_vot_voice_gender_female">Női</string>
-  <string name="morphe_vot_tts_sample">Változás van! </string>
-  <string name="morphe_vot_http_error_title">A fordítás nem elérhető</string>
-  <string name="morphe_vot_http_error_message">"A fordításszolgáltatás HTTP hibát (%s) adott vissza. Az IP-címe valószínűleg korlátozva lett legfeljebb 24 órára.
-
-A fordítások folytatásához váltson másik fordításszolgáltatót a beállításokban, vagy használjon VPN-t"</string>
-  <string name="morphe_vot_do_not_show_again">Ne jelenjen meg többet</string>
-  <string name="morphe_vot_export_api_key_warning">"A beállításaid tartalmaznak egy OpenRouter API kulcsot.
-
-A API kulcsodat soha nem szabad megosztani. Bárki, akinek hozzáférése van hozzá, felhasználhatja az OpenRouter jóváírásaidat"</string>
-  <string name="morphe_vot_openrouter_credits_title">Az OpenRouter jóváírásának limite elérése</string>
-  <string name="morphe_vot_openrouter_credits_message">Az OpenRouter jóváírásának limite elérése. Töltse fel egyenlegét vagy növelje a kulcs költési limitjét az OpenRouter.ai oldalon</string>
-  <string name="morphe_vot_openrouter_open_website">Nyissa meg az OpenRouter.ai oldalt</string>
-  <string name="morphe_vot_openrouter_error">Az OpenRouter fordítása sikertelen (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">A MyMemory napi limite elérése</string>
-  <string name="morphe_vot_mymemory_quota_next_available">A következő elérhetőség: %s</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Kimerítette a mai ingyenes MyMemory fordítási kvótát (5000 karakter). Adjon meg egy MyMemory e-mail címet a beállításokban a napi korlát 50000 karakterre emeléséhez, vagy váltson másik fordításszolgáltatót</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Kimerítette a mai MyMemory fordítási kvótát (50000 karakter). Váltson másik fordításszolgáltatót, vagy próbálkozzon holnap</string>
-  <string name="morphe_vot_mymemory_error">A MyMemory fordítása sikertelen (állapot %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Hurokismétlés engedélyezése</string>
   <string name="morphe_do_not_remember_loop_video_title">Ne emlékszik a loop videóra</string>

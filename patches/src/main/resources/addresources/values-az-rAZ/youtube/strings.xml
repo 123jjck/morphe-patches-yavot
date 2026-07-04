@@ -300,51 +300,7 @@ Məhdudiyyətlər:
 
 Paket adının düzgün olduğun yoxla və tətbiqi quraşdırın"</string>
   <string name="morphe_external_downloader_empty_warning">Paket adı boş ola bilməz</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Səs üstələyici tərcümə</string>
-  <string name="morphe_vot_screen_summary">Cihazdakı mətni nitqə çevirməni istifadə edərək video titrlərini oynatma ilə sinxronlaşdırıb ucadan oxu</string>
-  <string name="morphe_vot_enabled_title">Səs üstələyici tərcümə</string>
-  <string name="morphe_vot_caption_language_title">Dil</string>
-  <string name="morphe_vot_translation_service_title">Tərcümə təminatçısı</string>
-  <string name="morphe_vot_original_audio_volume_title">Orijinal səs səviyyəsi</string>
-  <string name="morphe_vot_original_audio_volume_summary">Tərcümə səslənərkən orijinal YouTube səsinin səviyyəsi</string>
-  <string name="morphe_vot_translation_volume_title">Tərcümə səs səviyyəsi</string>
-  <string name="morphe_vot_translation_volume_summary">Dublyaj olunmuş tərcümə səsinin səviyyəsi</string>
-  <string name="morphe_vot_max_speech_rate_title">Ən yüksək danışıq sürəti</string>
-  <string name="morphe_vot_max_speech_rate_summary">Danışığı titr bölümünə uyğunlaşdıranda ən yüksək sürət misli</string>
-  <string name="morphe_vot_mymemory_info_summary">"Pulsuz tərcümə API-si, API açarı tələb olunmur. Pulsuz paketdə hər gün 5.000 simvola qədər və ya e-poçt ünvanı ilə hər gün 50.000 simvola qədər.
-
-MyMemory.translated.net-i açmaq üçün buraya toxun"</string>
-  <string name="morphe_vot_mymemory_email_title">MyMemory e-poçtu</string>
-  <string name="morphe_vot_mymemory_email_summary">Könüllü. Gündəlik həddi 5.000-dən 50.000 simvola qədər artırmaq üçün MyMemory e-poçt ünvanınızı qeyd edin. Gizli limitdən istifadə etmək üçün boş buraxın</string>
-  <string name="morphe_vot_openrouter_info_summary">"OpenRouter vasitəsilə ödənişli Sİ tərcüməsi. Bir dəfə balansınızı artırın və minlərlə videonu tərcümə edin. Mistral Nemo ən ucuz seçimdir, Gemma 4 isə ən yüksək keyfiyyət təklif edir.
-
-OpenRouter.ai-ı açmaq üçün buraya toxunun"</string>
-  <string name="morphe_vot_openrouter_api_key_title">OpenRouter API açarı</string>
-  <string name="morphe_vot_openrouter_api_key_summary">OpenRouter API açarınız. OpenRouter.ai &gt; İş sahəsi &gt; API Açarların-da açar yaradın</string>
-  <string name="morphe_vot_openrouter_model_title">OpenRouter Modeli</string>
-  <string name="morphe_vot_openrouter_model_custom">Fərdi</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouter tənzimlənməyib</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Bu təminatçını seçməzdən əvvəl tənzimləmələrdə OpenRouter API açarınızı qeyd edin</string>
-  <string name="morphe_vot_cost_free">Pulsuz</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">Hər 100 video saatına %s</string>
-  <string name="morphe_vot_tts_voice_type">Səs</string>
-  <string name="morphe_vot_tts_system">Sistem</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Çoxdilli kişi</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Çoxdilli qadın</string>
-  <string name="morphe_vot_voice_gender_male">Kişi</string>
-  <string name="morphe_vot_voice_gender_female">Qadın</string>
-  <string name="morphe_vot_tts_sample">Dəyişmə vaxtıdır!</string>
-  <string name="morphe_vot_http_error_title">Tərcümə əlçatan deyil</string>
-  <string name="morphe_vot_http_error_message">"Tərcümə xidməti HTTP %s xətası qaytardı. IP ünvanınız deyəsən 24 saatlıq norma limitinə məruz qalıb.
-
-​Tərcümələri istifadə etməyə davam etmək üçün tənzimləmələrdə başqa tərcümə təminatçısına keç və ya VPN istifadə et"</string>
-  <string name="morphe_vot_do_not_show_again">Təkrar göstərmə</string>
-  <string name="morphe_vot_export_api_key_warning">"Tənzimləmələriniz OpenRouter API açarını ehtiva edir.
-
-API açarınız heç vaxt paylaşılmamalıdır. Buna girişi olan hər bir kəs OpenRouter balansınızı istifadə edə bilər"</string>
-  <string name="morphe_vot_openrouter_credits_title">OpenRouter balans limitinə çatıldı</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Video təkrarlamanı aktivləşdir</string>
   <!-- interaction.loop.loopVideoButtonPatch -->

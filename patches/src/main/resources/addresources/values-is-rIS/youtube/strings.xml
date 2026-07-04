@@ -300,59 +300,7 @@ Takmörk:
 
 Staðfestu að pakkanafnið er rétt og að appið er uppsett"</string>
   <string name="morphe_external_downloader_empty_warning">Pakkanafnið er tómt</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">Þýðing á raddsegulmagni</string>
-  <string name="morphe_vot_screen_summary">Les upp undirtitla myndbandsins með texta-til-tala á tækinu, samhæmt með endursendingu</string>
-  <string name="morphe_vot_enabled_title">Þýðing á raddsegulmagni</string>
-  <string name="morphe_vot_caption_language_title">Tungumál</string>
-  <string name="morphe_vot_translation_service_title">Þýðingarveitari</string>
-  <string name="morphe_vot_original_audio_volume_title">Hljóðstyrkur upprunalegu hljóðs</string>
-  <string name="morphe_vot_original_audio_volume_summary">Hljóðstyrkur upprunalegu YouTube hljóðs á meðan þýðingin er að tala</string>
-  <string name="morphe_vot_translation_volume_title">Þýðingarhljóðstyrkur</string>
-  <string name="morphe_vot_translation_volume_summary">Hljóðstyrkur dubbuðu þýðingarinnar</string>
-  <string name="morphe_vot_max_speech_rate_title">Hámark ræðuhraði</string>
-  <string name="morphe_vot_max_speech_rate_summary">Hámark hraðamargarar þegar ræða er aðlöguð undirtitli</string>
-  <string name="morphe_vot_mymemory_info_summary">"Ókeypis þýðingar API, engin API lykill þarf. Allt að 5.000 stafir á dag á ókeypis stigi, eða allt að 50.000 stafir á dag með netfang.
-
-Bankaðu hér til að opna MyMemory.translated.net"</string>
-  <string name="morphe_vot_mymemory_email_title">MyMemory netfang</string>
-  <string name="morphe_vot_mymemory_email_summary">Valfrjálst. Sláðu inn MyMemory netfangið þitt til að auka daglegar takmarkanir úr 5.000 í 50.000 stafir. Lættu tómt til að nota óanonyma takmarkanir</string>
-  <string name="morphe_vot_openrouter_info_summary">"Greidd AI þýðing í gegnum OpenRouter. Fylltu á einu sinni og þýðu þúsundir mynda. Mistral Nemo er ódýrast, Gemma 4 býður upp á hæsta gæði.
-
-Bankaðu hér til að opna OpenRouter.ai"</string>
-  <string name="morphe_vot_openrouter_api_key_title">OpenRouter API lykill</string>
-  <string name="morphe_vot_openrouter_api_key_summary">OpenRouter API lykillinn þinn. Búðu til lykil á OpenRouter.ai > Workspace > API Keys</string>
-  <string name="morphe_vot_openrouter_model_title">OpenRouter líkan</string>
-  <string name="morphe_vot_openrouter_model_custom">Sérsniðin</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouter er ekki stillt</string>
-  <string name="morphe_vot_openrouter_not_configured_message">Sláðu inn OpenRouter API lykilinn þinn í stillingum áður en þú velur þennan veitari</string>
-  <string name="morphe_vot_cost_free">Ókeypis</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">%s á 100 klukkustundir vídeó</string>
-  <string name="morphe_vot_tts_voice_type">Rödd</string>
-  <string name="morphe_vot_tts_system">Kerfi</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">Multilingual karlkyns</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">Multilingual kvenkyns</string>
-  <string name="morphe_vot_voice_gender_male">Karlkyns</string>
-  <string name="morphe_vot_voice_gender_female">Kvenkyns</string>
-  <string name="morphe_vot_tts_sample">Þetta er breytingatími!</string>
-  <string name="morphe_vot_http_error_title">Þýðing ófáanleg</string>
-  <string name="morphe_vot_http_error_message">"Þýðingarþjónustan skilaði HTTP villa %s. IP-tölu þína hefur líklega verið takmörkuð í allt að 24 klukkustundir.
-
-Til að halda áfram að nota þýðingar, skiptu yfir á annan þýðingarveitara í stillingum eða notaðu VPN"</string>
-  <string name="morphe_vot_do_not_show_again">Ekki sýna aftur</string>
-  <string name="morphe_vot_export_api_key_warning">"Stillingarnar þínar innihalda OpenRouter API lykil.
-
-API lykillinn þinn ætti aldrei að deila. Allir með aðgang að honum geta notað OpenRouter einingarnar þínar"</string>
-  <string name="morphe_vot_openrouter_credits_title">OpenRouter eininga takmörkun náð</string>
-  <string name="morphe_vot_openrouter_credits_message">OpenRouter einingatakmörkun þín hefur verið náð. Fylltu á reikninginn þinn eða auktu útgáfutakmörkunina á lyklinum þínum á OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_open_website">Opna OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_error">OpenRouter þýðing mistókst (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">MyMemory daglegt takmörkun náð</string>
-  <string name="morphe_vot_mymemory_quota_next_available">Mögulegt á %s.</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">Þú hefur notað daglegu frí þýðingatakmörkun MyMemory (5.000 stafir). Bættu við MyMemory netfangi í stillingum til að auka daglegu takmarkanirnar í 50.000 stafir, eða skiptu yfir á annan þýðingarþjónustu</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">Þú hefur notað MyMemory þýðingatakmörkun dagsins (50.000 stafir). Skiptu yfir á annan þýðingarþjónustu eða reyndu aftur á morgun</string>
-  <string name="morphe_vot_mymemory_error">MyMemory þýðing mistókst (staða %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">Vírúð lykkjuframkvæmd myndbandsins</string>
   <string name="morphe_do_not_remember_loop_video_title">Kemur í veg fyrir að múnari útforðagildumgrunnur</string>

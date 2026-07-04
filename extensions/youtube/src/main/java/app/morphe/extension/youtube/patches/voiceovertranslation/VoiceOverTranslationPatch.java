@@ -1,1072 +1,943 @@
 /*
- * Copyright 2026 Morphe.
- * https://github.com/MorpheApp/morphe-patches
+ * Copyright (C) 2026 anddea
  *
- * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ * This file is part of the revanced-patches project:
+ * https://github.com/anddea/revanced-patches
+ *
+ * Original author(s) (based on contributions):
+ * - Jav1x (https://github.com/Jav1x)
+ * - anddea (https://github.com/anddea)
+ *
+ * Ported to morphe-patches: https://github.com/MorpheApp/morphe-patches
+ * Modified by: Jav1x (https://github.com/Jav1x)
+ *
+ * Licensed under the GNU General Public License v3.0.
+ *
+ * ------------------------------------------------------------------------
+ * GPLv3 Section 7 – Attribution Notice
+ * ------------------------------------------------------------------------
+ *
+ * This file contains substantial original work by the author(s) listed above.
+ *
+ * In accordance with Section 7 of the GNU General Public License v3.0,
+ * the following additional terms apply to this file:
+ *
+ * 1. Attribution (Section 7(b)): This specific copyright notice and the
+ *    list of original authors above must be preserved in any copy or
+ *    derivative work. You may add your own copyright notice below it,
+ *    but you may not remove the original one.
+ *
+ * 2. Origin (Section 7(c)): Modified versions must be clearly marked as
+ *    such (e.g., by adding a "Modified by" line or a new copyright notice).
+ *    They must not be misrepresented as the original work.
+ *
+ * ------------------------------------------------------------------------
+ * Version Control Acknowledgement (Non-binding Request)
+ * ------------------------------------------------------------------------
+ *
+ * While not a legal requirement of the GPLv3, the original author(s)
+ * respectfully request that ports or substantial modifications retain
+ * historical authorship credit in version control systems (e.g., Git),
+ * listing original author(s) appropriately and modifiers as committers
+ * or co-authors.
  */
 
 package app.morphe.extension.youtube.patches.voiceovertranslation;
 
-import static app.morphe.extension.shared.StringRef.str;
-import static app.morphe.extension.shared.settings.BaseSettings.DEBUG;
-import static app.morphe.extension.youtube.patches.voiceovertranslation.TranscriptTranslator.TRANSLATION_SERVICE_MY_MEMORY;
-import static app.morphe.extension.youtube.patches.voiceovertranslation.TranscriptTranslator.TRANSLATION_SERVICE_OPENROUTER;
-
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Intent;
+import android.content.Context;
 import android.media.AudioAttributes;
-import android.net.Uri;
-import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
-import android.util.Pair;
-import android.widget.LinearLayout;
+import android.media.MediaPlayer;
+import android.media.PlaybackParams;
+import android.os.Handler;
+import android.os.Looper;
 
-import androidx.annotation.Nullable;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.function.Consumer;
 
 import app.morphe.extension.shared.Logger;
-import app.morphe.extension.shared.ResourceUtils;
 import app.morphe.extension.shared.Utils;
-import app.morphe.extension.shared.settings.Setting;
-import app.morphe.extension.shared.ui.CustomDialog;
-import app.morphe.extension.youtube.patches.VideoInformation;
 import app.morphe.extension.youtube.settings.Settings;
-import app.morphe.extension.youtube.shared.PlayerType;
+import app.morphe.extension.youtube.patches.VideoInformation;
 import app.morphe.extension.youtube.shared.VideoState;
 
-/**
- * Orchestrator for the voice-over translation feature: reacts to video time/state changes,
- * fetches and translates captions, prefetches TTS audio, and dispatches each segment to
- * either the Edge or System TTS engine.
- *
- * <p>Collaborators:
- * <ul>
- *   <li>{@link TranscriptFetcher} / {@link TranscriptTranslator} - caption pipeline</li>
- *   <li>{@link TtsPrefetcher} - background synthesis into {@link TtsCache}</li>
- *   <li>{@link TtsEngine} - Edge TTS WebSocket + MediaPlayer playback</li>
- *   <li>{@link VotOriginalVolumePatch} - ducks the original audio while TTS speaks</li>
- * </ul>
- *
- * <p>State is touched only on the main thread; the few cross-thread reads use volatile fields.
- */
-@SuppressWarnings({"unused", "deprecation", "RedundantSuppression"})
+import static app.morphe.extension.shared.StringRef.str;
+import static app.morphe.extension.shared.Utils.showToastShort;
+
+@SuppressWarnings("unused")
 public class VoiceOverTranslationPatch {
 
-    public static final Setting.ImportExportCallback VOT_IMPORT_EXPORT_CALLBACK = new Setting.ImportExportCallback() {
-        @Override
-        public void settingsImported(@Nullable Activity context) {}
+    private static final String TAG = "VOT";
 
-        @Override
-        public void settingsExported(@Nullable Activity context) {
-            showExportWarningIfNeeded(context);
+    private static final long PAUSE_DETECTION_TIMEOUT_MS = 1500;
+    private static final long PROXY_PREPARE_TIMEOUT_MS = 15000;
+    private static final String PROXY_USER_AGENT =
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+            "(KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36";
+    private static final Handler mainHandler = new Handler(Looper.getMainLooper());
+
+    private static final AtomicReference<MediaPlayer> mediaPlayer = new AtomicReference<>(null);
+    private static final AtomicBoolean isTranslating = new AtomicBoolean(false);
+    private static final AtomicReference<String> currentTranslatedVideoId = new AtomicReference<>("");
+    private static volatile boolean isPaused = false;
+    private static volatile long lastVideoTimeMs = -1;
+    private static final long SEEK_DRIFT_THRESHOLD_MS = 20000;
+    private static final long USER_SEEK_JUMP_MS = 3000;
+
+    private static final Runnable pauseCheckRunnable = () -> {
+        if (!isPaused) {
+            pauseAudio();
         }
     };
 
-    private static void showExportWarningIfNeeded(@Nullable Activity activity) {
-        Utils.verifyOnMainThread();
-        if (activity == null) return;
-        if (Settings.VOT_OPENROUTER_API_KEY.get().trim().isEmpty()) return;
-        if (Settings.VOT_HIDE_EXPORT_WARNING.get()) return;
-        Pair<Dialog, LinearLayout> dialogPair = CustomDialog.create(
-                activity,
-                null,
-                str("morphe_vot_export_api_key_warning"),
-                null,
-                null,
-                () -> {},
-                null,
-                str("morphe_vot_do_not_show_again"),
-                () -> Settings.VOT_HIDE_EXPORT_WARNING.save(true),
-                true
-        );
-        Utils.showDialog(activity, dialogPair.first, false, null);
+    private static Runnable proxyPrepareTimeoutRunnable = () -> {};
+    private static Runnable onTranslationStateChangeCallback;
+
+    public static void setOnTranslationStateChangeCallback(Runnable r) {
+        onTranslationStateChangeCallback = r;
     }
 
-    public static class MyMemoryServiceAvailability implements Setting.Availability {
-        @Override
-        public boolean isAvailable() {
-            return Settings.VOT_TRANSLATION_SERVICE.get().equals(TRANSLATION_SERVICE_MY_MEMORY);
-        }
-
-        @Override
-        public List<Setting<?>> getParentSettings() {
-            return List.of(Settings.VOT_TRANSLATION_SERVICE);
+    private static void notifyTranslationStateChanged() {
+        if (onTranslationStateChangeCallback != null) {
+            Utils.runOnMainThread(onTranslationStateChangeCallback);
         }
     }
 
-    public static class OpenRouterServiceAvailability implements Setting.Availability {
-        @Override
-        public boolean isAvailable() {
-            return Settings.VOT_TRANSLATION_SERVICE.get().equals(TRANSLATION_SERVICE_OPENROUTER);
-        }
-
-        @Override
-        public List<Setting<?>> getParentSettings() {
-            return List.of(Settings.VOT_TRANSLATION_SERVICE);
-        }
-    }
-
-    // Tick-over-tick time jump above this triggers seek handling.
-    private static final long SEEK_JUMP_THRESHOLD_MS = 2_900;
-
-    // Minimum time into a segment to justify seeking within the audio instead of
-    // playing from the start. Prevents tiny pops on small adjustments.
-    private static final long SEEK_INTO_THRESHOLD_MS = 1_000;
-
-    // Floor on the calculated speech rate; never slow speech below natural speed.
-    private static final float MIN_SPEECH_RATE = 1.0f;
-
-    public static final String TTS_ENGINE_SYSTEM = "system";
-    private static final String VOT_ID_PREFIX = "vot_";
-    private static final String VOT_TEST_ID_PREFIX = "vot_test_";
-    private static final String TEST_VIDEO_ID = "test";
-    private static final int TEST_SEGMENT_INDEX = -1;
-    private static final long TEST_PREFETCH_WAIT = 500;
-
-    static volatile long lastVideoTimeMs;
-    // Tracks the latest known position even when paused, unlike lastVideoTimeMs which only
-    // updates during PLAYING. Used by translate() to pick the right initial batch when a video
-    // starts mid-position (PAUSED setVideoTime calls arrive before newVideoLoaded and before
-    // lastVideoTimeMs is ever set for the new video).
-    static volatile long videoPositionHint;
-    // Estimated video timestamp when the currently-playing TTS audio finishes.
-    // Duck is held until this time so TTS that extends into the gap before the
-    // next segment does not prematurely restore the original audio volume.
-    private static long ttsEndVideoTimeMs;
-    // Deduplicates lookahead wake-ups so a tight tick loop does not flood the main looper.
-    private static long scheduledCheckForSegmentStartMs = -1;
-    // Tracks slot-fit rate and the playback speed in effect when the active utterance
-    // started, so a mid-utterance video speed change can be re-applied to MediaPlayer.
-    // lastAppliedPlaybackSpeed = -1 means nothing is playing.
-    private static float currentTtsBaseRate = 1.0f;
-    private static float lastAppliedPlaybackSpeed = -1f;
-
-    private static List<TranscriptSegment> segments = new ArrayList<>();
-    // Volatile so background threads can read the active segment without
-    // taking a lock. Writes still happen only on the main thread.
-    private static volatile int lastSpokenIndex = -1;
-
-    /** @return Index of the segment whose audio is mid-playback, or -1. Safe off-main-thread. */
-    static int getLastSpokenIndex() {
-        return lastSpokenIndex;
-    }
-    private static String currentVideoId = "";
-    private static boolean isLoading;
-    private static boolean sessionEnabled = Settings.VOT_SESSION_ENABLED.get();
-    private static boolean wasExplicitSeek;
-    private static volatile boolean httpErrorDialogShownThisVideo;
-
-    private static Runnable onStateChangeCallback;
-
-    private static TextToSpeech tts;
-    private static boolean ttsReady;
-
-    private static boolean isTestSpeaking;
-    private static long currentTestId;
-    private static long currentPreloadId;
-    private static String lastTestVoiceId = "";
-
-    private static final TtsEngine ttsEngine = TtsEngine.INSTANCE;
-
-    static {
-        PlayerType.getOnChange().addObserver(playerType -> {
-            if (!playerType.isMaximizedOrFullscreen()
-                    && playerType != PlayerType.WATCH_WHILE_MINIMIZED
-                    && playerType != PlayerType.WATCH_WHILE_PICTURE_IN_PICTURE
-                    && playerType != PlayerType.WATCH_WHILE_SLIDING_MINIMIZED_MAXIMIZED) {
-                Logger.printDebug(() -> "Stopping TTS for player type: " + playerType);
-                stopTts();
-                if (playerType == PlayerType.NONE) {
-                    currentVideoId = "";
-                    segments = new ArrayList<>();
-                    TtsPrefetcher.clear();
-                }
-            }
-            return kotlin.Unit.INSTANCE;
-        });
-
-        VideoState.getOnChange().addObserver(state -> {
-            if (state == VideoState.PAUSED) {
-                // System TTS has no pause API, so fall back to stop+restart for it.
-                // Edge TTS pauses in place to avoid restarting the segment and re-arming
-                // audio focus (which would clip the first frames after resume).
-                if (tts != null && tts.isSpeaking()) {
-                    Logger.printDebug(() -> "Stopping system TTS for video state: " + state);
-                    stopTts();
-                } else {
-                    Logger.printDebug(() -> "Pausing Edge TTS for video state: " + state);
-                    ttsEngine.pause();
-                }
-            } else if (state == VideoState.PLAYING) {
-                ttsEngine.resume();
-            } else if (state == VideoState.ENDED) {
-                Logger.printDebug(() -> "Stopping TTS prefetch and abandoning ducking: " + state);
-                // Do not stop TTS to allow any currently playing TTS to finish.
-                VotOriginalVolumePatch.clearAudioMultiplier();
-                TtsPrefetcher.clear();
-            }
-            return kotlin.Unit.INSTANCE;
+    /** Runs a Runnable on the main thread only if translation generation hasn't changed. */
+    private static void runOnUiIfCurrentGen(long gen, Runnable r) {
+        Utils.runOnMainThread(() -> {
+            if (translationGeneration == gen) r.run();
         });
     }
 
-    /**
-     * Injection point.
-     */
-    public static void newVideoLoaded(String videoId) {
-        // Always reset so seek detection fires correctly on the first videoTimeChanged
-        // and so the first segment at the new position is spoken even when the same
-        // video is reopened at a different timestamp (e.g. chapter links, continue watching).
-        lastVideoTimeMs = 0;
-        lastSpokenIndex = -1;
-        wasExplicitSeek = false;
-        if (videoId.equals(currentVideoId)) return;
+    private static volatile String tempProxyFile = null;
 
-        Logger.printDebug(() -> "preloadTranslations newVideoLoaded");
-        TranscriptTranslator.requestAbort();
-        stopTts();
-        currentVideoId = videoId;
-        segments = new ArrayList<>();
-        httpErrorDialogShownThisVideo = false;
+    private static volatile String pendingVideoId = "";
+    private static volatile String pendingVideoTitle = "";
+    private static volatile long pendingVideoLength = 0L;
+    private static volatile boolean pendingIsLive = false;
 
-        if (!Settings.VOT_ENABLED.get() || !sessionEnabled) return;
-        if (PlayerType.getCurrent() == PlayerType.INLINE_MINIMAL) return;
-        TtsPrefetcher.updateVideo(videoId, segments);
-        loadTranscript(videoId);
+    /** True when user started translation and original audio should be ducked before translated audio starts. */
+    public static volatile boolean translationStarting = false;
 
-        // Open the Edge socket in parallel so the first synthesis doesn't pay handshake cost.
-        if (!Settings.VOT_USE_NATIVE_TTS.get()) {
-            Utils.runOnBackgroundThread(() -> {
-                try {
-                    ttsEngine.warmConnection();
-                } catch (Exception ex) {
-                    Logger.printDebug(() -> "Edge warm-up failed: " + ex);
-                }
-            });
-        }
-    }
+    /** Remaining seconds while waiting for translation. -1 when not waiting. Updated for BottomSheet countdown. */
+    public static volatile int waitingTimeSeconds = -1;
 
-    /**
-     * Injection point.
-     */
-    public static void videoTimeChanged(long timeMs) {
-        if (!Settings.VOT_ENABLED.get() || !sessionEnabled) {
-            VotOriginalVolumePatch.clearAudioMultiplier();
-            return; // Feature or session disabled.
-        }
-        Utils.verifyOnMainThread();
+    /** Incremented on every new video or stop, invalidates in-flight async translation chains. */
+    private static volatile long translationGeneration = 0;
 
-        propagatePlaybackSpeedIfChanged();
-
-        PlayerType currentPlayerType = PlayerType.getCurrent();
-        if (!currentPlayerType.isMaximizedOrFullscreen()
-                && currentPlayerType != PlayerType.WATCH_WHILE_MINIMIZED
-                && currentPlayerType != PlayerType.WATCH_WHILE_PICTURE_IN_PICTURE) {
-            Logger.printDebug(() -> "Ignoring TTS for player type: " + currentPlayerType);
-            return;
-        }
-        VideoState state = VideoState.getCurrent();
-        // Capture position before the PAUSED early return so translate() can pick the right
-        // initial batch even when the first setVideoTime ticks arrive before play begins.
-        videoPositionHint = timeMs;
-        // Video state can be null until the overlay is activated the first time.
-        if (state != null && state != VideoState.PLAYING) {
-            Logger.printDebug(() -> "Ignoring TTS for video state: " + state);
-            return; // paused, ended, or loading
-        }
-
-        TtsPrefetcher.updateTime(timeMs);
-
-        final long prevVideoTimeMs = lastVideoTimeMs;
-        lastVideoTimeMs = timeMs;
-
-        if (segments.isEmpty()) return;
-
-        if (prevVideoTimeMs > 0) {
-            final long timeSinceLastUpdate = Math.abs(timeMs - prevVideoTimeMs);
-            // Scale by playback speed so at high speeds a normal tick (which spans a
-            // larger in-video gap) isn't mistaken for a user seek.
-            final long jumpThreshold = (long) (SEEK_JUMP_THRESHOLD_MS
-                    * Math.max(1.0f, VideoInformation.getPlaybackSpeed()));
-            if (timeSinceLastUpdate > jumpThreshold) {
-                // Small jumps within the same segment are handled by speak()'s startTime logic.
-                Logger.printDebug(() -> "videoTimeChanged jump detected: " + timeSinceLastUpdate + "ms");
-                wasExplicitSeek = true;
-                stopTts();
-                lastSpokenIndex = -1;
-                // Re-target translation at the new position so a seek into an untranslated region
-                // is translated next instead of waiting for the sequential dispatch to reach it.
-                TranscriptTranslator.onSeek(timeMs);
-            }
-        }
-
-        // Amount of time to look ahead for the next segment to schedule it.
-        final long lookaheadMs = 900;
-        // Small delay added to scheduled segments to ensure the video time has definitely
-        // reached the segment start time before the check runs.
-        final long schedulingDelayMs = 10;
-
-        for (int i = 0, size = segments.size(); i < size; i++) {
-            TranscriptSegment seg = segments.get(i);
-            final long segPlaybackStartMs = seg.playbackStartMs;
-            if (timeMs >= segPlaybackStartMs) {
-                if (timeMs < seg.playbackEndMs) {
-                    if (i != lastSpokenIndex) {
-                        if (TranscriptTranslator.isAwaitingTranslationAt(i, seg.startMs, seg.text)) {
-                            final int segIdx = i;
-                            Logger.printDebug(() -> "Waiting for translation at segment: " + segIdx);
-                            break;
-                        }
-                        // isAwaitingTranslationAt returns false once a batch is marked done, even if
-                        // translation failed and the segment kept its source-language text. Check lang
-                        // so a permanently untranslated segment is never spoken.
-                        if (TranscriptFetcher.isSpokenLanguageDifferent(resolveTargetLang(), seg.lang)) {
-                            final int segIdx = i;
-                            Logger.printDebug(() -> "Skipping untranslated segment: " + segIdx);
-                            break;
-                        }
-                        if (!ttsEngine.isSpeaking() || wasExplicitSeek) {
-                            lastSpokenIndex = i;
-                            Logger.printDebug(() -> "Found segment: " + lastSpokenIndex
-                                    + " videoTime: " + timeMs);
-                            speak(seg, i);
-                        }
-                    }
-                    break;
-                }
-            } else if (i > lastSpokenIndex && segPlaybackStartMs <= timeMs + lookaheadMs) {
-                // Next segment starts between now and the next update to this method.
-                // Schedule a call to recheck TTS playback when the segment will start.
-                if (segPlaybackStartMs != scheduledCheckForSegmentStartMs) {
-                    final float speed = Math.max(0.1f, VideoInformation.getPlaybackSpeed());
-                    final long delayMs = (long) ((segPlaybackStartMs - timeMs + schedulingDelayMs) / speed);
-                    Logger.printDebug(() -> "Scheduling next segment check in " + delayMs + "ms");
-                    scheduledCheckForSegmentStartMs = segPlaybackStartMs;
-                    Utils.runOnMainThreadDelayed(() -> {
-                        scheduledCheckForSegmentStartMs = -1;
-                        videoTimeChanged(VideoInformation.getVideoTime());
-                    }, delayMs);
-                }
-                break;
-            }
-        }
-        // ttsEndVideoTimeMs keeps the duck alive while TTS speaks into the gap before the next
-        // segment, preventing a brief volume flicker mid-utterance.
-        if (ttsEngine.isSpeaking() || isTestSpeaking || timeMs < ttsEndVideoTimeMs) {
-            VotOriginalVolumePatch.setAudioMultiplier(Settings.VOT_ORIGINAL_AUDIO_VOLUME.get() / 100.0f);
-        } else {
-            VotOriginalVolumePatch.clearAudioMultiplier();
-        }
-    }
-
-    /** @return true when VoT is enabled, the session is on, and a transcript is loaded. */
-    public static boolean isTranslationActive() {
-        Utils.verifyOnMainThread();
-        return Settings.VOT_ENABLED.get() && sessionEnabled && !segments.isEmpty();
-    }
-
-    /** @return Per-session enabled flag (toggleable via the player button) - not the global setting. */
-    public static boolean isSessionEnabled() {
-        return sessionEnabled;
-    }
-
-    /** Flips the session enabled flag and either stops TTS or kicks off transcript loading. */
-    public static void toggleTranslation() {
-        Utils.verifyOnMainThread();
-        sessionEnabled = !sessionEnabled;
-        Settings.VOT_SESSION_ENABLED.save(sessionEnabled);
-        if (!sessionEnabled) {
-            stopTts();
-            lastSpokenIndex = -1;
-        } else {
-            if (!currentVideoId.isEmpty() && segments.isEmpty() && !isLoading) {
-                loadTranscript(currentVideoId);
-            }
-        }
-        notifyStateChanged();
-    }
-
-    /** Stops any in-progress TTS without changing session state. */
-    public static void interruptSpeech() {
-        Utils.verifyOnMainThread();
-        stopTts();
-    }
-
-    /**
-     * Resets every segment's playback window to its original caption timing and asks the
-     * prefetcher to re-evaluate. Used by the bottom-sheet "reset" action.
-     */
-    public static void resetPlaybackState() {
-        Utils.verifyOnMainThread();
-        for (TranscriptSegment seg : segments) {
-            seg.playbackStartMs = seg.startMs;
-            seg.playbackEndMs = seg.endMs;
-            seg.durationMs = -1;
-        }
-        TtsPrefetcher.triggerRescan();
-    }
-
-    /** Applies the current voice volume setting to the active playback. */
-    public static void updatePlaybackVolume() {
-        Utils.verifyOnMainThread();
-        ttsEngine.setVolume(Settings.VOT_TRANSLATION_VOLUME.get() / 100.0f);
-    }
-
-    /** Re-applies the ducking multiplier so a Settings change takes effect immediately. */
-    public static void updateOriginalAudioMultiplier() {
-        Utils.verifyOnMainThread();
-        if (ttsEngine.isSpeaking() || isTestSpeaking) {
-            VotOriginalVolumePatch.setAudioMultiplier(Settings.VOT_ORIGINAL_AUDIO_VOLUME.get() / 100.0f);
-        }
-    }
-
-    /** Discards the current transcript and TTS state and re-fetches for the current video. */
-    public static void reloadTranscript() {
-        Utils.verifyOnMainThread();
-        if (currentVideoId.isEmpty()) return;
-        stopTts();
-        segments = new ArrayList<>();
-        lastSpokenIndex = -1;
-        // Without this, in-flight onUpdate callbacks for the old language would restore
-        // stale segments after we cleared them.
-        TranscriptTranslator.requestAbort();
-        if (!isLoading) {
-            loadTranscript(currentVideoId);
-        }
-    }
-
-    /** Registers a callback fired whenever toggle/load state changes (used by the player button UI). */
-    public static void setOnTranslationStateChangeCallback(Runnable callback) {
-        Utils.verifyOnMainThread();
-        onStateChangeCallback = callback;
-    }
-
-    private static void notifyStateChanged() {
-        Logger.printDebug(() -> "notifyStateChanged");
-        Utils.verifyOnMainThread();
-        if (onStateChangeCallback != null) onStateChangeCallback.run();
-    }
-
-    private static void loadTranscript(String videoId) {
-        Logger.printDebug(() -> "loadTranscript: " + videoId);
-        Utils.verifyOnMainThread();
-        if (isLoading) return;
-        isLoading = true;
-        final String loadLang = resolveTargetLang();
-        final String loadService = Settings.VOT_TRANSLATION_SERVICE.get();
-
-        Utils.runOnBackgroundThread(() -> {
-            try {
-                // Later translation batches arrive asynchronously; swap the list in only
-                // while the same video is still playing. Timings and size are identical
-                // across updates, so lastSpokenIndex stays valid.
-                List<TranscriptSegment> fetched = TranscriptFetcher.fetch(
-                        videoId,
-                        updated -> {
-                            Utils.verifyOnMainThread();
-                            if (videoId.equals(currentVideoId) && loadLang.equals(resolveTargetLang())) {
-                                // If the segment we last started speaking had its text replaced
-                                // by a freshly-arrived translation, stop and let videoTimeChanged
-                                // re-speak it with the translated text on the next tick.
-                                if (lastSpokenIndex >= 0
-                                        && lastSpokenIndex < segments.size()
-                                        && lastSpokenIndex < updated.size() && !segments.get(lastSpokenIndex).text
-                                        .equals(updated.get(lastSpokenIndex).text)) {
-                                    stopTts();
-                                }
-                                segments = updated;
-                            }
-                        },
-                        () -> {
-                            Utils.verifyOnMainThread();
-                            return !videoId.equals(currentVideoId)
-                                    || VideoState.getCurrent() == VideoState.ENDED;
-                        });
-
-                Utils.runOnMainThread(() -> {
-                    if (videoId.equals(currentVideoId) && loadLang.equals(resolveTargetLang())) {
-                        // With sequential batch execution, cancelCheck.get() ensures every
-                        // onUpdate fires before translate() returns, so segments is already
-                        // fully translated by the time we arrive here. Only fall back to the
-                        // batch-0 snapshot (fetched) if onUpdate never ran (single batch or
-                        // no translation needed).
-                        if (segments.isEmpty()) segments = fetched;
-                        TtsPrefetcher.updateVideo(videoId, segments);
-                        Logger.printDebug(() -> "Loaded: " + fetched.size() + " segments for :" + videoId);
-                        notifyStateChanged();
-                    }
-                });
-            } catch (Exception ex) {
-                logError(() -> "Transcript fetch failed", ex);
-            } finally {
-                Utils.runOnMainThread(() -> {
-                    isLoading = false;
-                    // Restart if the video, language, or translation provider changed while this fetch was in flight.
-                    if (!currentVideoId.isEmpty() && Settings.VOT_ENABLED.get()
-                            && (!currentVideoId.equals(videoId)
-                            || !loadLang.equals(resolveTargetLang())
-                            || !loadService.equals(Settings.VOT_TRANSLATION_SERVICE.get()))) {
-                        loadTranscript(currentVideoId);
-                    }
-                });
-            }
-        });
-    }
-
-    /** Lazily creates the System TTS instance and wires its completion listener. Idempotent. */
-    public static void ensureTts() {
-        Utils.verifyOnMainThread();
-        if (tts != null) return;
-        Logger.printDebug(() -> "ensureTts creating tts");
-
-        tts = new TextToSpeech(Utils.getContext(), status -> Utils.runOnMainThreadNowOrLater(() -> {
-            if (status != TextToSpeech.SUCCESS) {
-                Logger.printDebug(() -> "TTS initialization failed: " + status);
-                return;
-            }
-            updateTtsLanguage();
-
-            // USAGE_ASSISTANCE_NAVIGATION_GUIDANCE plays TTS on a dedicated audio usage
-            // so its volume is controlled independently of YouTube's media stream.
-            tts.setAudioAttributes(new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                    .build());
-
-            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                @Override
-                public void onStart(String utteranceId) {
-                }
-
-                @Override
-                public void onDone(String utteranceId) {
-                    Utils.runOnMainThreadNowOrLater(() -> {
-                        try {
-                            if (utteranceId == null) return;
-                            if (utteranceId.startsWith(VOT_TEST_ID_PREFIX)) {
-                                String suffix = utteranceId.substring(VOT_TEST_ID_PREFIX.length());
-                                String[] parts = suffix.split("_");
-                                final long tId = Long.parseLong(parts[0]);
-                                final long pId = Long.parseLong(parts[1]);
-                                ttsEngine.clearBusy(pId);
-                                if (tId == currentTestId) isTestSpeaking = false;
-                            } else if (utteranceId.startsWith(VOT_ID_PREFIX)) {
-                                long id = Long.parseLong(utteranceId.substring(VOT_ID_PREFIX.length()));
-                                if (id == ttsEngine.getPlaybackId()) {
-                                    ttsEngine.clearBusy(id);
-                                    triggerNextSegmentCheck();
-                                }
-                            }
-                        } catch (Exception ex) {
-                            logError(() -> "Utterance listener onDone failure", ex);
-                        }
-                    });
-                }
-
-                @Override
-                public void onError(String utteranceId) {
-                    onDone(utteranceId);
-                }
-            });
-
-            ttsReady = true;
+    public static void initialize(@SuppressWarnings("unused") VideoInformation.PlaybackController controller) {
+        VideoState.addOnPlayingListener(() -> Utils.runOnMainThread(() -> {
+            if (VideoState.getCurrent() != VideoState.PLAYING) return;
+            resumeAudio(-1);
+        }));
+        VideoState.addOnNotPlayingListener(() -> Utils.runOnMainThread(() -> {
+            mainHandler.removeCallbacks(pauseCheckRunnable);
+            pauseAudio();
+        }));
+        VideoInformation.addOnPlaybackSpeedChangeListener(() -> Utils.runOnMainThread(() -> {
+            if (VideoState.getCurrent() != VideoState.PLAYING) return;
+            MediaPlayer p = mediaPlayer.get();
+            if (p != null) applyPlaybackSpeedToPlayer(p);
         }));
     }
 
-    private static void updateTtsLanguage() {
-        Utils.verifyOnMainThread();
-        if (tts == null) return;
-        Locale locale = Locale.forLanguageTag(resolveTargetLang());
-        final int result = tts.setLanguage(locale);
-        if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-            tts.setLanguage(Locale.ENGLISH);
+    public static void onVideoIdChanged(String videoId) {
+        if (videoId == null || videoId.isEmpty()) return;
+        long videoLength = VideoInformation.getVideoLength();
+        boolean isLive = videoLength <= 0 || videoLength == Long.MAX_VALUE;
+        newVideoStarted(videoId,
+                VideoInformation.getVideoTitle(), videoLength, isLive);
+    }
+
+    public static void newVideoStarted(
+            String videoId, String videoTitle,
+            long videoLength, boolean isLive
+    ) {
+        if (!Settings.VOT_ENABLED.get()) return;
+        String newId = videoId != null ? videoId : "";
+        if (!newId.equals(pendingVideoId)) {
+            translationStarting = false;
+        }
+        if (!newId.equals(currentTranslatedVideoId.get())) {
+            stopAudioPlayback();
+        }
+        pendingVideoId = newId;
+        pendingVideoTitle = videoTitle != null ? videoTitle : "";
+        pendingVideoLength = videoLength;
+        pendingIsLive = isLive;
+        if (!newId.equals(currentTranslatedVideoId.get())) {
+            translationGeneration++;
         }
     }
 
-    private static void speak(TranscriptSegment seg, int index) {
-        Utils.verifyOnMainThread();
-        Logger.printDebug(() -> "Speak: " + seg);
-        String lang = resolveTargetLang();
-        final float volume = Settings.VOT_TRANSLATION_VOLUME.get() / 100.0f;
+    public static void toggleTranslation() {
+        if (!Settings.VOT_ENABLED.get()) return;
 
-        String voice = resolveVoice(lang);
-        if (voice == null) return;
-
-        final long speakFromMs = Math.max(lastVideoTimeMs, seg.playbackStartMs);
-        final long availableMs = seg.playbackEndMs - speakFromMs;
-
-        // Exact if cached, otherwise estimated from char count.
-        final long speechDurationMs = getSpeechDurationMs(seg, index, voice, lang);
-
-        // Calculate if we should seek into the audio (e.g. after a short seek within segment).
-        long startTimeMs = 0;
-        if (wasExplicitSeek) {
-            final long timeIntoSegment = lastVideoTimeMs - seg.playbackStartMs;
-            if (timeIntoSegment > SEEK_INTO_THRESHOLD_MS) {
-                // Approximate audio position assuming natural speed. The TTS clip is usually
-                // shorter than the video segment, so clamp to its length to avoid seeking past
-                // the end.
-                startTimeMs = Math.min(timeIntoSegment, speechDurationMs);
-            }
-            final long startTimeMsFinal = startTimeMs;
-            Logger.printDebug(() -> "Explicit seek resume. timeIntoSegment: " + timeIntoSegment
-                    + "ms, startTimeMs: " + startTimeMsFinal + "ms");
-            // Reset the flag so future segments at normal playback start from the beginning.
-            wasExplicitSeek = false;
-        }
-
-        // Rate must be based on the audio that will actually play, not the full clip.
-        final long remainingSpeechMs = Math.max(0, speechDurationMs - startTimeMs);
-        final float rate = calculateSpeechRate(remainingSpeechMs, availableMs);
-        ttsEndVideoTimeMs = speakFromMs + (long) (remainingSpeechMs / rate);
-        currentTtsBaseRate = rate;
-        lastAppliedPlaybackSpeed = VideoInformation.getPlaybackSpeed();
-
-        if (TTS_ENGINE_SYSTEM.equals(voice)) {
-            ensureTts();
-            if (!ttsReady) {
-                Logger.printDebug(() -> "Native TTS not ready, skipping segment");
-                return;
-            }
-            updateTtsLanguage();
-            VotOriginalVolumePatch.setAudioMultiplier(Settings.VOT_ORIGINAL_AUDIO_VOLUME.get() / 100.0f);
-            tts.setSpeechRate(rate * VideoInformation.getPlaybackSpeed());
-            Bundle params = new Bundle();
-            params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume);
-            final long id = ttsEngine.markBusy();
-            // System TTS doesn't support seekTo, so it will always play from the start.
-            tts.speak(seg.text, TextToSpeech.QUEUE_FLUSH, params, VOT_ID_PREFIX + id);
+        if (isTranslationActive()) {
+            translationStarting = false;
+            waitingTimeSeconds = -1;
+            stopAudioPlayback();
+            isTranslating.set(false);
+            notifyTranslationStateChanged();
+            showToastShort(str("morphe_vot_stopped"));
+            refreshOriginalAudioVolume();
             return;
         }
 
-        VotOriginalVolumePatch.setAudioMultiplier(Settings.VOT_ORIGINAL_AUDIO_VOLUME.get() / 100.0f);
-        // Multiply by playback speed so TTS keeps pace with non-1.0x video.
-        final float playbackRate = rate * VideoInformation.getPlaybackSpeed();
-        byte[] cached = TtsCache.get(currentVideoId, index, voice, lang, seg.text);
-        if (cached != null) {
-            final long playbackId = ttsEngine.markBusy();
-            ttsEngine.play(cached, volume, playbackRate, startTimeMs, playbackId,
-                    VoiceOverTranslationPatch::triggerNextSegmentCheck);
+        if (pendingIsLive) {
+            showToastShort(str("morphe_vot_unavailable_live"));
             return;
         }
-
-        // Synthesize at natural speed so the result can be cached and reused at any rate;
-        // playback rate is applied by MediaPlayer instead.
-        final long playbackId = ttsEngine.markBusy();
-        final String videoIdSnapshot = currentVideoId;
-        final long startTimeMsSnapshot = startTimeMs;
-        Utils.runOnBackgroundThread(() -> {
-            byte[] data;
-            try {
-                data = ttsEngine.prefetch(seg.text, voice, lang);
-            } catch (Exception ex) {
-                logError(() -> "On-demand synthesis failed for segment " + index, ex);
-                Utils.runOnMainThread(VoiceOverTranslationPatch::triggerNextSegmentCheck);
-                return;
-            }
-            if (data.length > 0) {
-                TtsCache.put(videoIdSnapshot, index, voice, lang, seg.text, data);
-            }
-            final byte[] finalData = data;
-            Utils.runOnMainThread(() -> {
-                if (finalData.length > 0 && playbackId == ttsEngine.getPlaybackId()) {
-                    // Re-read playback speed in case it changed during synthesis.
-                    final float playbackRateNow = rate * VideoInformation.getPlaybackSpeed();
-                    ttsEngine.play(finalData, volume, playbackRateNow, startTimeMsSnapshot, playbackId,
-                            VoiceOverTranslationPatch::triggerNextSegmentCheck);
-                } else {
-                    triggerNextSegmentCheck();
-                }
-            });
-        });
-    }
-
-    private static void triggerNextSegmentCheck() {
-        Utils.runOnMainThreadNowOrLater(() -> {
-            if (VideoState.getCurrent() == VideoState.PLAYING) {
-                videoTimeChanged(VideoInformation.getVideoTime());
-            }
-        });
-    }
-
-    /**
-     * Pushes a new MediaPlayer rate when video speed changes mid-utterance so the listener
-     * doesn't wait for the current one to finish. No-op for System TTS (Android TextToSpeech
-     * cannot change rate in-flight; the next utterance picks up the new value).
-     */
-    private static void propagatePlaybackSpeedIfChanged() {
-        if (lastAppliedPlaybackSpeed < 0) return;
-        final float current = VideoInformation.getPlaybackSpeed();
-        if (current == lastAppliedPlaybackSpeed) return;
-        lastAppliedPlaybackSpeed = current;
-        ttsEngine.setPlaybackRate(currentTtsBaseRate * current);
-    }
-
-    /**
-     * Returns a speech rate multiplier that fits {@code speechDurationMs} into {@code availableMs}.
-     * Never slows below normal speed and is capped by the user-configured max rate.
-     */
-    private static float calculateSpeechRate(long speechDurationMs, long availableMs) {
-        final float maxRate = Settings.VOT_MAX_SPEECH_RATE.get() / 10.0f;
-        if (availableMs <= 0) return maxRate;
-        return Math.max(MIN_SPEECH_RATE, Math.min(maxRate, speechDurationMs / (float) availableMs));
-    }
-
-    private static long getSpeechDurationMs(TranscriptSegment seg, int index, String voice, String lang) {
-        long duration = seg.durationMs;
-        if (duration <= 0) {
-            duration = TtsCache.getDuration(currentVideoId, index, voice, lang, seg.text);
-            if (duration > 0) seg.durationMs = duration;
-        }
-        return duration > 0 ? duration : (long) seg.text.length() * TtsEngine.ESTIMATED_MS_PER_CHAR;
-    }
-
-    /**
-     * Estimates natural speech duration from character count and delegates to
-     * {@link #calculateSpeechRate(long, long)}. Used when exact duration is not yet known.
-     */
-    private static float calculateSpeechRate(String text, long availableMs) {
-        return calculateSpeechRate((long) text.length() * TtsEngine.ESTIMATED_MS_PER_CHAR, availableMs);
-    }
-
-    /**
-     * Called when the video position is programmatically seeked (e.g. SponsorBlock).
-     * Stops any in-progress TTS immediately, regardless of how short the jump was,
-     * so stale audio never plays over the new video position.
-     */
-    public static void onVideoSeeked() {
-        Logger.printDebug(() -> "onVideoSeeked");
-        Utils.verifyOnMainThread();
-        wasExplicitSeek = true;
-
-        // If no segment is mid-playback there is nothing to stop or preserve. This also
-        // skips the redundant work when videoTimeChanged's jump detection just handled
-        // this same seek (it resets lastSpokenIndex to -1).
-        if (lastSpokenIndex < 0) return;
-
-        // Check if the seek was within the current segment. If so, let videoTimeChanged
-        // handle the restart/seek-into logic to avoid a jarring stop and restart.
-        boolean insideSameSegment = false;
-        if (lastSpokenIndex < segments.size()) {
-            TranscriptSegment seg = segments.get(lastSpokenIndex);
-            if (lastVideoTimeMs >= seg.playbackStartMs && lastVideoTimeMs < seg.playbackEndMs) {
-                insideSameSegment = true;
-            }
-        }
-
-        if (!insideSameSegment) {
-            stopTts();
-            lastSpokenIndex = -1;
-        }
-    }
-
-    /** @return Short sample sentence in the current target language; used by voice preview. */
-    public static String getTestString() {
-        Locale locale = Locale.forLanguageTag(resolveTargetLang());
-        return ResourceUtils.getStringByLocale("morphe_vot_tts_sample", locale);
-    }
-
-    /**
-     * Synthesizes and plays a short test phrase with the given voice.
-     * If the engine is already speaking the same voice, stops it.
-     */
-    static void testSpeak(String voiceId) {
-        Logger.printDebug(() -> "testSpeak: " + voiceId);
-        Utils.verifyOnMainThread();
-
-        final boolean wasSameVoice = isTestSpeaking && voiceId.equals(lastTestVoiceId);
-        stopTts();
-        if (wasSameVoice) return;
-
-        final long testId = ++currentTestId;
-        isTestSpeaking = true;
-        lastTestVoiceId = voiceId;
-
-        final float volume = Settings.VOT_TRANSLATION_VOLUME.get() / 100.0f;
-
-        if (TTS_ENGINE_SYSTEM.equals(voiceId)) {
-            ensureTts();
-            if (!ttsReady) {
-                isTestSpeaking = false;
-                return;
-            }
-            updateTtsLanguage();
-            VotOriginalVolumePatch.setAudioMultiplier(Settings.VOT_ORIGINAL_AUDIO_VOLUME.get() / 100.0f);
-            Bundle params = new Bundle();
-            params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume);
-            tts.setSpeechRate(1.0f);
-            final long pId = ttsEngine.markBusy();
-            tts.speak(getTestString(), TextToSpeech.QUEUE_FLUSH, params,
-                    VOT_TEST_ID_PREFIX + testId + "_" + pId);
+        if (pendingVideoLength > 4 * 60 * 60 * 1000L) {
+            showToastShort(str("morphe_vot_unavailable_too_long"));
             return;
         }
-
-        final String lang = resolveTargetLang();
-        byte[] cached = TtsCache.get(TEST_VIDEO_ID, TEST_SEGMENT_INDEX, voiceId, lang, getTestString());
-        if (cached != null) {
-            VotOriginalVolumePatch.setAudioMultiplier(Settings.VOT_ORIGINAL_AUDIO_VOLUME.get() / 100.0f);
-            final long id = ttsEngine.markBusy();
-            ttsEngine.play(cached, volume, id, () -> updateIsTestSpeaking(testId));
+        String sourceLang = normalizeLanguageCode(Settings.VOT_SOURCE_LANGUAGE.get());
+        String targetLang = normalizeLanguageCode(Settings.VOT_TARGET_LANGUAGE.get());
+        if (!sourceLang.isEmpty() && !"auto".equalsIgnoreCase(sourceLang) && sourceLang.equals(targetLang)) {
+            showToastShort(str("morphe_vot_unavailable_same_language"));
             return;
         }
+        if (pendingVideoId == null || pendingVideoId.isEmpty()) return;
 
-        VotOriginalVolumePatch.setAudioMultiplier(Settings.VOT_ORIGINAL_AUDIO_VOLUME.get() / 100.0f);
-        ttsEngine.speak(getTestString(), voiceId, resolveTargetLang(), volume, () -> updateIsTestSpeaking(testId));
+        final String videoId = pendingVideoId;
+        final String videoTitle = pendingVideoTitle;
+        final double durationSeconds = pendingVideoLength / 1000.0;
+        translationStarting = true;
+        refreshOriginalAudioVolume();
+        Utils.runOnBackgroundThread(() -> requestTranslation(
+                videoId, videoTitle,
+                sourceLang, targetLang,
+                durationSeconds
+        ));
     }
 
-    private static void updateIsTestSpeaking(long testId) {
-        Utils.verifyOnMainThread();
-        if (testId == currentTestId) isTestSpeaking = false;
-    }
-
-    /**
-     * Preloads test phrases for all Edge TTS voices in the current target language.
-     */
-    static void preloadTestVoices() {
-        Utils.verifyOnMainThread();
-        final long preloadId = ++currentPreloadId;
-
-        String lang = resolveTargetLang();
-        List<VoiceCatalog.Voice> voices = VoiceCatalog.getVoicesForLang(lang);
-        if (voices == null || voices.isEmpty()) return;
-
-        Utils.runOnBackgroundThread(() -> {
-            String testString = getTestString();
-            for (VoiceCatalog.Voice voice : voices) {
-                if (preloadId != currentPreloadId) {
-                    Logger.printDebug(() -> "Aborting stale preload request: " + preloadId);
-                    return;
-                }
-
-                if (TtsCache.get(TEST_VIDEO_ID, TEST_SEGMENT_INDEX, voice.id, lang, testString) != null) {
-                    continue;
-                }
-
-                byte[] diskData = TtsCache.getTestSampleFromDisk(voice.id, lang);
-                if (diskData != null) {
-                    TtsCache.put(TEST_VIDEO_ID, TEST_SEGMENT_INDEX, voice.id, lang, testString, diskData);
-                    continue;
-                }
-
-                try {
-                    Logger.printDebug(() -> "Prefetching test phrase for: " + voice.id);
-                    byte[] data = ttsEngine.prefetch(testString, voice.id, lang);
-                    if (data.length > 0) {
-                        TtsCache.put(TEST_VIDEO_ID, TEST_SEGMENT_INDEX, voice.id, lang, testString, data);
-                        TtsCache.putTestSampleToDisk(voice.id, lang, data);
-                    }
-                    Thread.sleep(TEST_PREFETCH_WAIT);
-
-                } catch (Exception ex) {
-                    logError(() -> "preloadTestVoices failure: " + voice, ex);
-                    return;
-                }
-            }
-        });
-    }
-
-    private static void stopTts() {
-        Utils.verifyOnMainThread();
-        Logger.printDebug(() -> "stopTts");
-        isTestSpeaking = false;
-        ttsEngine.stop();
-        if (tts != null) tts.stop();
-        lastSpokenIndex = -1;
-        ttsEndVideoTimeMs = 0;
-        scheduledCheckForSegmentStartMs = -1;
-        currentTtsBaseRate = 1.0f;
-        lastAppliedPlaybackSpeed = -1f;
-        VotOriginalVolumePatch.clearAudioMultiplier();
+    public static boolean isTranslationActive() {
+        MediaPlayer mp = mediaPlayer.get();
+        if (mp == null) return translationStarting;
+        if (isPaused) return false;
+        return currentTranslatedVideoId.get() != null && !currentTranslatedVideoId.get().isEmpty();
     }
 
     /**
-     * @return BCP-47 language code(pt-BR, pt-PT, en-US, etc).
+     * Whether a cached (ready-to-play) translation exists for the current video and voice style.
+     * Uses pendingVideoId so it works immediately when the BottomSheet opens, before user presses translate.
+     * @param useLiveVoices true = live, false = standard
      */
-    static String resolveTargetLang() {
-        return Settings.VOT_CAPTION_LANGUAGE.isSetToDefault()
-                ? Locale.getDefault().toLanguageTag()
-                : Settings.VOT_CAPTION_LANGUAGE.get();
+    public static boolean isCachedForCurrentVideo(boolean useLiveVoices) {
+        String videoId = pendingVideoId;
+        if (videoId == null || videoId.isEmpty()) return false;
+        String sourceLang = normalizeLanguageCode(Settings.VOT_SOURCE_LANGUAGE.get());
+        String targetLang = normalizeLanguageCode(Settings.VOT_TARGET_LANGUAGE.get());
+        String url = "https://youtu.be/" + videoId;
+        return VotApiClient.hasCachedTranslation(url, sourceLang, targetLang, useLiveVoices);
     }
 
     /**
-     * @param lang ISO 639 (pt) or BCP 47 (pt-BR).
+     * Re-applies the current player volume so VOT original-audio multiplier takes effect immediately
+     * without reloading the video.
      */
-    private static String resolveVoice(String lang) {
-        return Settings.VOT_USE_NATIVE_TTS.get()
-                ? TTS_ENGINE_SYSTEM
-                : VoiceCatalog.resolve(lang, Settings.VOT_TTS_VOICE_TYPE.get());
+    public static void refreshOriginalAudioVolumeIfActive() {
+        if (!Settings.VOT_ENABLED.get()) return;
+        if (!isTranslationActive() && !translationStarting) return;
+        refreshOriginalAudioVolume();
     }
 
-    static void notifyHttpError(int statusCode) {
-        if (statusCode < 400 || statusCode >= 500) return;
-        if (!Settings.VOT_SHOW_HTTP_ERROR_DIALOG.get()) return;
-        if (httpErrorDialogShownThisVideo) return;
-        httpErrorDialogShownThisVideo = true;
+    /**
+     * Re-applies the player volume with the given original-audio volume percent,
+     * so the multiplier takes effect immediately.
+     *
+     * @param volumePercent original audio volume in percent (0-100)
+     */
+    public static void refreshOriginalAudioVolumeIfActive(int volumePercent) {
+        if (!Settings.VOT_ENABLED.get()) return;
+        if (!isTranslationActive() && !translationStarting) return;
+        refreshOriginalAudioVolume(volumePercent);
+    }
+
+    /**
+     * Forces the player to re-apply volume so AudioTrack.setVolume hook runs immediately.
+     */
+    public static void refreshOriginalAudioVolume() {
+        refreshOriginalAudioVolume(Settings.VOT_ORIGINAL_AUDIO_VOLUME.get());
+    }
+
+    /**
+     * Forces the player to re-apply volume with the given percent so AudioTrack.setVolume hook runs immediately.
+     * @param volumePercent original audio volume in percent (0-100)
+     */
+    public static void refreshOriginalAudioVolume(int volumePercent) {
+        if (VotOriginalVolumePatch.applyCurrentMultiplierNow(volumePercent)) return;
+
+        // Fallback path if no AudioTrack has been captured yet.
+        float currentVolume = VideoInformation.getPlayerVolume();
+        if (Float.isNaN(currentVolume)) currentVolume = 1.0f;
+        if (currentVolume < 0f) currentVolume = 0f;
+        if (currentVolume > 1f) currentVolume = 1f;
+        float nudgedVolume = currentVolume >= 0.99f
+                ? Math.max(0f, currentVolume - 0.01f)
+                : Math.min(1f, currentVolume + 0.01f);
+        VideoInformation.setPlayerVolume(nudgedVolume);
+        VideoInformation.setPlayerVolume(currentVolume);
+    }
+
+    /**
+     * Stops current translation and restarts it (e.g. when audio proxy setting changes).
+     * No-op if translation is not active.
+     */
+    public static void restartTranslationIfActive() {
+        if (!Settings.VOT_ENABLED.get()) return;
+        if (!isTranslationActive()) return;
+        String videoId = currentTranslatedVideoId.get();
+        if (videoId == null || videoId.isEmpty()) return;
+        if (pendingIsLive) return;
+        if (pendingVideoLength > 4 * 60 * 60 * 1000L) return;
+        String sourceLang = normalizeLanguageCode(Settings.VOT_SOURCE_LANGUAGE.get());
+        String targetLang = normalizeLanguageCode(Settings.VOT_TARGET_LANGUAGE.get());
+        if (!sourceLang.isEmpty() && !"auto".equalsIgnoreCase(sourceLang) && sourceLang.equals(targetLang)) return;
+
+        stopAudioPlayback();
+        VotApiClient.clearTranslationCache(); // force fresh request after settings change
+        double durationSeconds = pendingVideoLength / 1000.0;
+        Utils.runOnBackgroundThread(() -> requestTranslation(
+                videoId, pendingVideoTitle,
+                sourceLang, targetLang,
+                durationSeconds
+        ));
+    }
+
+    public static void setVideoTime(long videoTimeMillis) {
+        if (!Settings.VOT_ENABLED.get()) return;
+        if (isPaused) {
+            final long time = videoTimeMillis;
+            mainHandler.postDelayed(() -> resumeAudio(time), 80);
+        }
+        mainHandler.removeCallbacks(pauseCheckRunnable);
+        mainHandler.postDelayed(pauseCheckRunnable, PAUSE_DETECTION_TIMEOUT_MS);
+        MediaPlayer mp = mediaPlayer.get();
+        if (mp == null || !mp.isPlaying()) return;
+        final long time = videoTimeMillis;
         Utils.runOnMainThread(() -> {
-            Activity activity = Utils.getActivity();
-            if (activity == null || activity.isFinishing() || activity.isDestroyed()) return;
-            showHttpErrorDialog(activity, statusCode);
+            MediaPlayer p = mediaPlayer.get();
+            if (p == null || !p.isPlaying()) return;
+            applyPlaybackSpeedToPlayer(p);
+            try {
+                int audioPos = p.getCurrentPosition();
+                long drift = Math.abs(audioPos - time);
+                long prev = lastVideoTimeMs;
+                lastVideoTimeMs = time;
+                boolean userSeeked = prev >= 0 && (time < prev - 500 || time > prev + USER_SEEK_JUMP_MS);
+                if (userSeeked || drift > SEEK_DRIFT_THRESHOLD_MS) {
+                    p.seekTo((int) time);
+                    applyPlaybackSpeedToPlayer(p);
+                }
+            } catch (IllegalStateException ignored) { }
         });
     }
 
-    static void notifyOpenRouterError(int httpCode, String errorBody) {
-        if (httpErrorDialogShownThisVideo) return;
-        httpErrorDialogShownThisVideo = true;
-        if (TranscriptTranslator.isOpenRouterCreditsError(httpCode, errorBody)) {
-            Utils.runOnMainThread(() -> {
-                Activity activity = Utils.getActivity();
-                if (activity == null || activity.isFinishing() || activity.isDestroyed()) return;
-                showOpenRouterCreditsDialog(activity);
-            });
-        } else {
-            Utils.showToastLong(str("morphe_vot_openrouter_error", httpCode));
+    static String formatRemainingTime(int seconds) {
+        if (seconds < 60) {
+            return str("morphe_vot_time_sec", Math.max(1, seconds));
         }
-    }
-
-    private static void showOpenRouterCreditsDialog(Activity activity) {
-        Utils.verifyOnMainThread();
-        try {
-            Pair<Dialog, LinearLayout> pair = CustomDialog.create(
-                    activity,
-                    str("morphe_vot_openrouter_credits_title"),
-                    str("morphe_vot_openrouter_credits_message"),
-                    null,
-                    null,
-                    () -> {},
-                    null,
-                    str("morphe_vot_openrouter_open_website"),
-                    () -> {
-                        try {
-                            activity.startActivity(
-                                    new Intent(Intent.ACTION_VIEW, Uri.parse("https://openrouter.ai/credits"))
-                                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                        } catch (Exception ex) {
-                            logError(() -> "Failed to open openrouter.ai", ex);
-                        }
-                    },
-                    true
-            );
-            pair.first.show();
-        } catch (Exception ex) {
-            logError(() -> "showOpenRouterCreditsDialog failure", ex);
-        }
-    }
-
-    static void notifyMyMemoryError(int responseStatus, @Nullable String details) {
-        if (httpErrorDialogShownThisVideo) return;
-        httpErrorDialogShownThisVideo = true;
-        if (TranscriptTranslator.isMyMemoryQuotaError(responseStatus, details)) {
-            final String nextAvailableAt = formatNextAvailableClockTime(
-                    TranscriptTranslator.parseMyMemoryNextAvailableMinutes(details));
-            Utils.runOnMainThread(() -> {
-                Activity activity = Utils.getActivity();
-                if (activity == null || activity.isFinishing() || activity.isDestroyed()) return;
-                showMyMemoryQuotaDialog(activity, nextAvailableAt);
-            });
-        } else {
-            Utils.showToastLong(str("morphe_vot_mymemory_error", responseStatus));
-        }
+        int minutes = (seconds + 30) / 60;
+        return str("morphe_vot_time_min", minutes);
     }
 
     /**
-     * Converts a wait duration to the wall-clock time the quota will reset, formatted as
-     * {@code HH:mm} in the device locale. Returns null when the duration is unknown so the
-     * dialog can omit the "next available at" line.
+     * Normalizes language codes from morphe's format (uppercase, DEFAULT=auto)
+     * to the format expected by the VOT API (lowercase).
      */
-    @Nullable
-    private static String formatNextAvailableClockTime(@Nullable Long waitMinutes) {
-        if (waitMinutes == null) return null;
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.MINUTE, waitMinutes.intValue());
-        return String.format(Locale.getDefault(), "%02d:%02d",
-                c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
+    private static String normalizeLanguageCode(String code) {
+        if (code == null || code.isEmpty() || "DEFAULT".equalsIgnoreCase(code) || "auto".equalsIgnoreCase(code)) {
+            return "auto";
+        }
+        return code.toLowerCase(java.util.Locale.US);
     }
 
-    private static void showMyMemoryQuotaDialog(Activity activity, @Nullable String nextAvailableAt) {
-        Utils.verifyOnMainThread();
+    private static boolean isProxyUrl(String url) {
+        if (url == null || url.isEmpty()) return false;
         try {
-            // Show a different body depending on whether the user already gets the 10x
-            // limit via an email - otherwise we'd suggest adding what's already there.
-            final boolean emailSet = !Settings.VOT_MYMEMORY_EMAIL.get().trim().isEmpty();
-            String message = emailSet
-                    ? str("morphe_vot_mymemory_quota_message_with_email")
-                    : str("morphe_vot_mymemory_quota_message_no_email");
-            if (nextAvailableAt != null) {
-                message = str("morphe_vot_mymemory_quota_next_available", nextAvailableAt)
-                        + "\n\n" + message;
+            String path = new URI(url).getRawPath();
+            return path != null && path.contains("/audio-proxy/");
+        } catch (URISyntaxException e) {
+            return false;
+        }
+    }
+
+    private static void requestTranslation(
+            String videoId, String videoTitle,
+            String sourceLang, String targetLang,
+            double durationSeconds
+    ) {
+        requestTranslation(videoId, videoTitle, sourceLang, targetLang,
+                durationSeconds, Settings.VOT_USE_LIVE_VOICES.get());
+    }
+
+    private static void requestTranslation(
+            String videoId, String videoTitle,
+            String sourceLang, String targetLang,
+            double durationSeconds, boolean useLiveVoices
+    ) {
+        if (isTranslating.getAndSet(true)) return;
+        final long generation = translationGeneration;
+        try {
+            String youtubeUrl = "https://youtu.be/" + videoId;
+            VotApiClient.TranslationResult result = VotApiClient.requestTranslation(
+                    youtubeUrl, durationSeconds, sourceLang, targetLang, videoTitle, useLiveVoices);
+            if (result == null) {
+                runOnUiIfCurrentGen(generation, () -> {
+                    waitingTimeSeconds = -1;
+                    translationStarting = false;
+                    refreshOriginalAudioVolume();
+                    showToastShort(str("morphe_vot_playback_error"));
+                });
+                return;
             }
-            Pair<Dialog, LinearLayout> pair = CustomDialog.create(
-                    activity,
-                    str("morphe_vot_mymemory_quota_title"),
-                    message,
-                    null,
-                    null,
-                    () -> {},
-                    null,
-                    null,
-                    null,
-                    true
-            );
-            pair.first.show();
-        } catch (Exception ex) {
-            logError(() -> "showMyMemoryQuotaDialog failure", ex);
-        }
-    }
-
-    private static void showHttpErrorDialog(Activity activity, int statusCode) {
-        Utils.verifyOnMainThread();
-        try {
-            Pair<Dialog, LinearLayout> pair = CustomDialog.create(
-                    activity,
-                    str("morphe_vot_http_error_title"),
-                    str("morphe_vot_http_error_message", statusCode),
-                    null,
-                    null,
-                    () -> { },
-                    null,
-                    str("morphe_vot_do_not_show_again"),
-                    () -> Settings.VOT_SHOW_HTTP_ERROR_DIALOG.save(false),
-                    true
-            );
-            pair.first.show();
-        } catch (Exception ex) {
-            logError(() -> "showHttpErrorDialog failure", ex);
-        }
-    }
-
-    public static void fetchOpenRouterModelCost(String model, Consumer<Float> onResult) {
-        TranscriptTranslator.fetchOpenRouterModelCost(model, onResult);
-    }
-
-    public static String formatOpenRouterCostPerHundredHours(float cost) {
-        if (cost == 0) {
-            return str("morphe_vot_cost_free");
-        }
-
-        String costString;
-        if (cost < 0.001f) {
-            costString = "< $0.001";
-        } else {
-            String format;
-            if (cost < 0.01f) {
-                format = "$%.3f";
+            Logger.printDebug(() -> "VOT response: status=" + result.status()
+                    + " remainingTime=" + result.remainingTime()
+                    + " useLiveVoices=" + useLiveVoices
+                    + " audioUrl=" + (result.audioUrl() != null ? result.audioUrl().substring(0, Math.min(80, result.audioUrl().length())) : "null")
+                    + " translationId=" + result.translationId()
+                    + " message=" + result.message());
+            int status = result.status();
+            if (status == VotApiClient.STATUS_FINISHED || status == VotApiClient.STATUS_PART_CONTENT) {
+                if (result.audioUrl() != null && !result.audioUrl().isEmpty()) {
+                    playAudioWithProxyFallback(videoId, result.audioUrl(), generation);
+                } else {
+                    runOnUiIfCurrentGen(generation, () -> {
+                        waitingTimeSeconds = -1;
+                        translationStarting = false;
+                        refreshOriginalAudioVolume();
+                        showToastShort(str("morphe_vot_playback_error"));
+                    });
+                }
+            } else if (status == VotApiClient.STATUS_FAILED) {
+                if (useLiveVoices && VotApiClient.isLivelyVoiceUnavailableError(result.message())) {
+                    // Live voices unavailable for this language pair – fallback to standard voices.
+                    Logger.printDebug(() -> "VOT live voices unavailable, retrying with standard voices");
+                    isTranslating.set(false);
+                    Utils.runOnBackgroundThread(() -> {
+                        if (translationGeneration != generation) return;
+                        requestTranslation(videoId, videoTitle, sourceLang, targetLang, durationSeconds, false);
+                    });
+                    return;
+                }
+                runOnUiIfCurrentGen(generation, () -> {
+                    waitingTimeSeconds = -1;
+                    translationStarting = false;
+                    refreshOriginalAudioVolume();
+                    showToastShort(str("morphe_vot_playback_error"));
+                });
+            } else if (status == VotApiClient.STATUS_SESSION_REQUIRED) {
+                if (useLiveVoices) {
+                    String oauthToken = Settings.VOT_OAUTH_TOKEN.get();
+                    if (oauthToken == null || oauthToken.isEmpty()) {
+                        // No OAuth token configured for live voices — tell user to add one.
+                        runOnUiIfCurrentGen(generation, () -> {
+                            waitingTimeSeconds = -1;
+                            translationStarting = false;
+                            refreshOriginalAudioVolume();
+                            showToastShort(str("morphe_vot_auth_required"));
+                        });
+                        return;
+                    }
+                    // Token is set but live voices session still failed — fallback to standard voices.
+                    Logger.printDebug(() -> "VOT live voices session failed, retrying with standard voices");
+                    isTranslating.set(false);
+                    Utils.runOnBackgroundThread(() -> {
+                        if (translationGeneration != generation) return;
+                        requestTranslation(videoId, videoTitle, sourceLang, targetLang, durationSeconds, false);
+                    });
+                    return;
+                }
+                // Standard voices session failed — cannot proceed
+                runOnUiIfCurrentGen(generation, () -> {
+                    waitingTimeSeconds = -1;
+                    translationStarting = false;
+                    refreshOriginalAudioVolume();
+                    showToastShort(str("morphe_vot_playback_error"));
+                });
+            } else if (status == VotApiClient.STATUS_AUDIO_REQUESTED) {
+                String translationId = result.translationId();
+                VotApiClient.sendFailedAudio(youtubeUrl);
+                String oauth = useLiveVoices ? Settings.VOT_OAUTH_TOKEN.get() : null;
+                VotApiClient.sendEmptyAudio(youtubeUrl, translationId, oauth);
+                int pollWaitTime = result.remainingTime() > 0 ? result.remainingTime() : 63;
+                waitingTimeSeconds = pollWaitTime;
+                notifyTranslationStateChanged();
+                runOnUiIfCurrentGen(generation, () -> Utils.showToastLong(str("morphe_vot_stream_waiting", formatRemainingTime(pollWaitTime))));
+                pollTranslation(videoId, videoTitle, youtubeUrl, durationSeconds, sourceLang, targetLang,
+                        pollWaitTime, useLiveVoices, generation, 0);
             } else {
-                format = "$%.2f";
+                int waitTime = result.remainingTime() > 0 ? result.remainingTime() : 63;
+                waitingTimeSeconds = waitTime;
+                notifyTranslationStateChanged();
+                runOnUiIfCurrentGen(generation, () -> Utils.showToastLong(str("morphe_vot_stream_waiting", formatRemainingTime(waitTime))));
+                pollTranslation(videoId, videoTitle, youtubeUrl, durationSeconds, sourceLang, targetLang, waitTime, useLiveVoices, generation, 0);
             }
-            costString = String.format(Locale.US, format, cost);
+        } catch (Exception e) {
+            Logger.printException(() -> "requestTranslation failed", e);
+            runOnUiIfCurrentGen(generation, () -> {
+                translationStarting = false;
+                refreshOriginalAudioVolume();
+                showToastShort(str("morphe_vot_playback_error"));
+            });
+        } finally {
+            isTranslating.set(false);
         }
-
-        return str("morphe_vot_cost_per_hour", costString);
     }
 
-    static void logError(Logger.LogMessage message, @Nullable Exception ex) {
-        if (DEBUG.get()) Logger.printException(message, ex);
-        else Logger.printInfo(message, ex);
+    private static void playAudioWithProxyFallback(String videoId, String directAudioUrl, long generation) {
+        boolean useProxy = Settings.VOT_AUDIO_PROXY_ENABLED.get();
+        String url = useProxy ? VotApiClient.toProxyAudioUrl(directAudioUrl) : directAudioUrl;
+        String fallback = useProxy ? directAudioUrl : null;
+        runOnUiIfCurrentGen(generation, () -> startAudioPlayback(videoId, url, fallback));
+    }
+
+    /**
+     * Polls the VOT API at intervals, showing remaining wait time.
+     * @param generation capture from caller; aborts all actions if it changed
+     */
+    private static void pollTranslation(
+            String videoId, String videoTitle,
+            String url, double duration,
+            String sourceLang, String targetLang,
+            int waitSeconds, boolean useLiveVoices, long generation, int retryCount
+    ) {
+        try {
+            Thread.sleep(waitSeconds * 1000L);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return;
+        }
+        if (translationGeneration != generation) return;
+        try {
+            VotApiClient.TranslationResult result = VotApiClient.requestTranslation(
+                    url, duration, sourceLang, targetLang, videoTitle, useLiveVoices, false);
+            if (result == null) {
+                if (retryCount < 1 && translationGeneration == generation) {
+                    // Network error — retry once with a short delay
+                    pollTranslation(videoId, videoTitle, url, duration, sourceLang, targetLang,
+                            Math.min(waitSeconds, 30), useLiveVoices, generation, retryCount + 1);
+                } else {
+                    runOnUiIfCurrentGen(generation, () -> {
+                        translationStarting = false;
+                        refreshOriginalAudioVolume();
+                        showToastShort(str("morphe_vot_playback_error"));
+                    });
+                }
+                return;
+            }
+            int status = result.status();
+            if (status == VotApiClient.STATUS_FINISHED || status == VotApiClient.STATUS_PART_CONTENT) {
+                if (result.audioUrl() != null && !result.audioUrl().isEmpty()) {
+                    playAudioWithProxyFallback(videoId, result.audioUrl(), generation);
+                    return;
+                }
+                runOnUiIfCurrentGen(generation, () -> {
+                    translationStarting = false;
+                    refreshOriginalAudioVolume();
+                    showToastShort(str("morphe_vot_playback_error"));
+                });
+                return;
+            } else if (status == VotApiClient.STATUS_FAILED) {
+                if (useLiveVoices && VotApiClient.isLivelyVoiceUnavailableError(result.message())) {
+                    Logger.printDebug(() -> "VOT live voices unavailable (poll), retrying with standard voices");
+                    Utils.runOnBackgroundThread(() -> {
+                        if (translationGeneration != generation) return;
+                        requestTranslation(videoId, videoTitle, sourceLang, targetLang, duration, false);
+                    });
+                    return;
+                }
+                runOnUiIfCurrentGen(generation, () -> {
+                    translationStarting = false;
+                    refreshOriginalAudioVolume();
+                    showToastShort(str("morphe_vot_playback_error"));
+                });
+                return;
+            } else if (status == VotApiClient.STATUS_SESSION_REQUIRED) {
+                if (useLiveVoices) {
+                    String oauthToken = Settings.VOT_OAUTH_TOKEN.get();
+                    if (oauthToken == null || oauthToken.isEmpty()) {
+                        runOnUiIfCurrentGen(generation, () -> {
+                            translationStarting = false;
+                            refreshOriginalAudioVolume();
+                            showToastShort(str("morphe_vot_auth_required"));
+                        });
+                        return;
+                    }
+                    Logger.printDebug(() -> "VOT live voices session failed (poll), retrying with standard voices");
+                    Utils.runOnBackgroundThread(() -> {
+                        if (translationGeneration != generation) return;
+                        requestTranslation(videoId, videoTitle, sourceLang, targetLang, duration, false);
+                    });
+                    return;
+                }
+                runOnUiIfCurrentGen(generation, () -> {
+                    translationStarting = false;
+                    refreshOriginalAudioVolume();
+                    showToastShort(str("morphe_vot_playback_error"));
+                });
+                return;
+            } else if (status == VotApiClient.STATUS_AUDIO_REQUESTED) {
+                // Audio was already sent in requestTranslation. Just wait — generation is in progress.
+                int pollWaitTime = result.remainingTime() > 0 ? result.remainingTime() : 63;
+                Logger.printDebug(() -> "VOT audio requested (poll), waiting " + pollWaitTime + "s");
+                if (translationGeneration != generation) return;
+                waitingTimeSeconds = pollWaitTime;
+                notifyTranslationStateChanged();
+                pollTranslation(videoId, videoTitle, url, duration, sourceLang, targetLang,
+                        pollWaitTime, useLiveVoices, generation, 0);
+                return;
+            } else {
+                int pollWaitTime = result.remainingTime() > 0 ? result.remainingTime() : 63;
+                waitingTimeSeconds = pollWaitTime;
+                notifyTranslationStateChanged();
+                pollTranslation(videoId, videoTitle, url, duration, sourceLang, targetLang, pollWaitTime, useLiveVoices, generation, 0);
+                return;
+            }
+        } catch (Exception e) {
+            Logger.printException(() -> "pollTranslation failure", e);
+            if (retryCount < 1 && translationGeneration == generation) {
+                // Retry once on exception
+                pollTranslation(videoId, videoTitle, url, duration, sourceLang, targetLang,
+                        Math.min(waitSeconds, 30), useLiveVoices, generation, retryCount + 1);
+            } else {
+                runOnUiIfCurrentGen(generation, () -> {
+                    translationStarting = false;
+                    refreshOriginalAudioVolume();
+                    showToastShort(str("morphe_vot_playback_error"));
+                });
+            }
+        }
+    }
+
+    private static void startAudioPlayback(String videoId, String audioUrl, String fallbackUrl) {
+        stopAudioPlayback();
+        waitingTimeSeconds = -1;
+        mainHandler.removeCallbacks(proxyPrepareTimeoutRunnable);
+        if (isProxyUrl(audioUrl)) {
+            Context ctx = Utils.getContext();
+            if (ctx == null) {
+                if (fallbackUrl != null && !fallbackUrl.isEmpty()) {
+                    startAudioPlayback(videoId, fallbackUrl, null);
+                } else {
+                    translationStarting = false;
+                    refreshOriginalAudioVolume();
+                    showToastShort(str("morphe_vot_playback_error"));
+                }
+                return;
+            }
+            final Context ctxFinal = ctx;
+            Utils.runOnBackgroundThread(() -> {
+                String localPath = fetchProxyAudioToTemp(audioUrl, ctxFinal);
+                Utils.runOnMainThread(() -> {
+                    if (localPath != null) {
+                        startAudioPlaybackFromFile(videoId, localPath);
+                    } else if (fallbackUrl != null && !fallbackUrl.isEmpty()) {
+                        startAudioPlayback(videoId, fallbackUrl, null);
+                    } else {
+                        translationStarting = false;
+                        refreshOriginalAudioVolume();
+                        showToastShort(str("morphe_vot_playback_error"));
+                    }
+                });
+            });
+            return;
+        }
+        startAudioPlaybackDirect(videoId, audioUrl, fallbackUrl);
+    }
+
+    private static String fetchProxyAudioToTemp(String proxyUrl, Context ctx) {
+        String urlToFetch = proxyUrl;
+        int maxRedirects = 5;
+        for (int redirect = 0; redirect < maxRedirects; redirect++) {
+            HttpURLConnection conn = null;
+            FileOutputStream fos = null;
+            try {
+                URL url = new URL(urlToFetch);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Range", "bytes=0-");
+                conn.setRequestProperty("User-Agent", PROXY_USER_AGENT);
+                conn.setRequestProperty("Accept", "*/*");
+                conn.setConnectTimeout(15000);
+                conn.setReadTimeout(60000);
+                conn.setInstanceFollowRedirects(false);
+                conn.connect();
+                int code = conn.getResponseCode();
+                if (code == 301 || code == 302 || code == 307 || code == 308) {
+                    String location = conn.getHeaderField("Location");
+                    conn.disconnect();
+                    if (location != null && !location.isEmpty()) {
+                        urlToFetch = location.startsWith("http") ? location : url.getProtocol() + "://" + url.getHost() + location;
+                        continue;
+                    }
+                    return null;
+                }
+                if (code != 200 && code != 206) return null;
+                File cacheDir = ctx.getCacheDir();
+                File tempFile = File.createTempFile("vot_proxy_", ".mp3", cacheDir);
+                long totalBytes = 0;
+                try (InputStream is = conn.getInputStream()) {
+                    fos = new FileOutputStream(tempFile);
+                    byte[] buf = new byte[8192];
+                    int n;
+                    while ((n = is.read(buf)) > 0) {
+                        fos.write(buf, 0, n);
+                        totalBytes += n;
+                    }
+                }
+                try {
+                    fos.close();
+                } catch (IOException ignored) {}
+                final long bytes = totalBytes;
+                if (bytes < 1000) {
+                    boolean deleted = tempFile.delete();
+                    if (!deleted) {
+                        Logger.printDebug(() -> "VOT temp proxy file could not be deleted: " + tempFile.getAbsolutePath());
+                    }
+                    return null;
+                }
+                return tempFile.getAbsolutePath();
+            } catch (Exception e) {
+                Logger.printException(() -> "VOT proxy fetch failed", e);
+                return null;
+            } finally {
+                if (fos != null) {
+                    try { fos.close(); } catch (IOException ignored) { }
+                }
+                if (conn != null) conn.disconnect();
+            }
+        }
+        return null;
+    }
+
+    private static void startAudioPlaybackFromFile(String videoId, String filePath) {
+        stopAudioPlayback();
+        tempProxyFile = filePath;
+        try {
+            MediaPlayer mp = new MediaPlayer();
+            mp.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .build());
+            mp.setDataSource(filePath);
+            mp.setOnPreparedListener(player -> Utils.runOnMainThread(() -> {
+                translationStarting = false;
+                float vol = Settings.VOT_TRANSLATION_VOLUME.get() / 100.0f;
+                player.setVolume(vol, vol);
+                long videoTime = VideoInformation.getVideoTime();
+                if (videoTime > 0) player.seekTo((int) videoTime);
+                if (VideoState.getCurrent() == VideoState.PLAYING) {
+                    applyPlaybackSpeedToPlayer(player);
+                    player.start();
+                } else {
+                    isPaused = true;
+                }
+            }));
+            mp.setOnErrorListener((p, what, extra) -> {
+                Logger.printDebug(() -> "VOT MediaPlayer error: what=" + what + " extra=" + extra);
+                Utils.runOnMainThread(() -> {
+                    stopAudioPlayback();
+                    translationStarting = false;
+                    refreshOriginalAudioVolume();
+                    showToastShort(str("morphe_vot_playback_error"));
+                });
+                return true;
+            });
+            mp.setOnCompletionListener(p -> deleteTempProxyFile());
+            mediaPlayer.set(mp);
+            currentTranslatedVideoId.set(videoId != null ? videoId : "");
+            notifyTranslationStateChanged();
+            mp.prepareAsync();
+        } catch (IOException e) {
+            Logger.printException(() -> "startAudioPlaybackFromFile failed", e);
+            deleteTempProxyFile();
+            translationStarting = false;
+            refreshOriginalAudioVolume();
+            showToastShort(str("morphe_vot_playback_error"));
+        }
+    }
+
+    private static void deleteTempProxyFile() {
+        String path = tempProxyFile;
+        tempProxyFile = null;
+        if (path != null) {
+            try {
+                File file = new File(path);
+                boolean deleted = file.delete();
+                if (!deleted) {
+                    Logger.printDebug(() -> "VOT temp proxy file could not be deleted: " + file.getAbsolutePath());
+                }
+            } catch (Exception ignored) { }
+        }
+    }
+
+    private static void startAudioPlaybackDirect(String videoId, String audioUrl, String fallbackUrl) {
+        try {
+            MediaPlayer mp = new MediaPlayer();
+            mp.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .build());
+            mp.setDataSource(audioUrl);
+            final String fallback = fallbackUrl;
+            mp.setOnPreparedListener(player -> Utils.runOnMainThread(() -> {
+                translationStarting = false;
+                mainHandler.removeCallbacks(proxyPrepareTimeoutRunnable);
+                float vol = Settings.VOT_TRANSLATION_VOLUME.get() / 100.0f;
+                player.setVolume(vol, vol);
+                long videoTime = VideoInformation.getVideoTime();
+                if (videoTime > 0) player.seekTo((int) videoTime);
+
+                if (VideoState.getCurrent() == VideoState.PLAYING) {
+                    applyPlaybackSpeedToPlayer(player);
+                    player.start();
+                } else {
+                    isPaused = true;
+                }
+            }));
+            mp.setOnErrorListener((p, what, extra) -> {
+                Logger.printDebug(() -> "VOT MediaPlayer error: what=" + what + " extra=" + extra + " url=" + audioUrl);
+                Utils.runOnMainThread(() -> {
+                    stopAudioPlayback();
+                    if (fallback != null && !fallback.isEmpty()) {
+                        startAudioPlayback(videoId, fallback, null);
+                    } else {
+                        translationStarting = false;
+                        refreshOriginalAudioVolume();
+                        showToastShort(str("morphe_vot_playback_error"));
+                    }
+                });
+                return true;
+            });
+            mediaPlayer.set(mp);
+            currentTranslatedVideoId.set(videoId != null ? videoId : "");
+            notifyTranslationStateChanged();
+            if (fallback != null && !fallback.isEmpty()) {
+                proxyPrepareTimeoutRunnable = () -> {
+                    MediaPlayer p = mediaPlayer.get();
+                    if (p != null && p == mp && !p.isPlaying()) {
+                        Logger.printDebug(() -> "VOT proxy prepare timeout, retrying direct");
+                        Utils.runOnMainThread(() -> {
+                            stopAudioPlayback();
+                            startAudioPlayback(videoId, fallback, null);
+                        });
+                    }
+                };
+                mainHandler.postDelayed(proxyPrepareTimeoutRunnable, PROXY_PREPARE_TIMEOUT_MS);
+            }
+            mp.prepareAsync();
+        } catch (IOException e) {
+            Logger.printException(() -> "startAudioPlayback failed for videoId: " + videoId, e);
+            Utils.runOnMainThread(() -> {
+                if (fallbackUrl != null && !fallbackUrl.isEmpty()) {
+                    startAudioPlayback(videoId, fallbackUrl, null);
+                } else {
+                    translationStarting = false;
+                    refreshOriginalAudioVolume();
+                    showToastShort(str("morphe_vot_playback_error"));
+                }
+            });
+        }
+    }
+
+    public static void stopAudioPlayback() {
+        mainHandler.removeCallbacks(pauseCheckRunnable);
+        mainHandler.removeCallbacks(proxyPrepareTimeoutRunnable);
+        waitingTimeSeconds = -1;
+        translationGeneration++;
+        deleteTempProxyFile();
+        MediaPlayer mp = mediaPlayer.getAndSet(null);
+        if (mp != null) {
+            try {
+                if (mp.isPlaying()) mp.stop();
+                mp.release();
+            } catch (Exception ignored) { }
+        }
+        currentTranslatedVideoId.set("");
+        notifyTranslationStateChanged();
+        isPaused = false;
+        lastVideoTimeMs = -1;
+    }
+
+    public static void pauseAudio() {
+        MediaPlayer mp = mediaPlayer.get();
+        if (mp != null) {
+            try {
+                if (mp.isPlaying()) {
+                    mp.pause();
+                    isPaused = true;
+                }
+            } catch (Exception ignored) { }
+        }
+    }
+
+    public static void resumeAudio(long videoTimeMillis) {
+        if (VideoState.getCurrent() != VideoState.PLAYING) return;
+        MediaPlayer mp = mediaPlayer.get();
+        if (mp == null || !isPaused) return;
+        try {
+            long position = videoTimeMillis >= 0 ? videoTimeMillis : VideoInformation.getVideoTime();
+            mp.seekTo((int) position);
+            applyPlaybackSpeedToPlayer(mp);
+            mp.start();
+            isPaused = false;
+            // Re-apply VOT volume multiplier — during pause the original volume
+            // may have been reset to full by the player (isTranslationActive
+            // returns false while paused, so the setVolume hook doesn't duck).
+            refreshOriginalAudioVolume();
+        } catch (Exception ignored) { }
+    }
+
+    /**
+     * Applies the current VOT_TRANSLATION_VOLUME setting to the MediaPlayer if translation is playing.
+     * Call this when the user changes the volume in the bottom sheet.
+     */
+    public static void applyVolumeToCurrentPlayer() {
+        applyVolumeToCurrentPlayer(Settings.VOT_TRANSLATION_VOLUME.get());
+    }
+
+    /**
+     * Applies the given volume percent (0-100) to the MediaPlayer if translation is playing.
+     * @param volumePercent volume in percent (0-100)
+     */
+    public static void applyVolumeToCurrentPlayer(int volumePercent) {
+        MediaPlayer mp = mediaPlayer.get();
+        if (mp == null) return;
+        float vol = volumePercent / 100.0f;
+        try {
+            mp.setVolume(vol, vol);
+        } catch (Exception ignored) { }
+    }
+
+    private static void applyPlaybackSpeedToPlayer(MediaPlayer mp) {
+        if (mp == null) return;
+        float speed = VideoInformation.getPlaybackSpeedFromPlayer();
+        if (speed > 0f) {
+            VideoInformation.setPlaybackSpeed(speed);
+        } else {
+            speed = VideoInformation.getPlaybackSpeed();
+        }
+        if (speed <= 0f) speed = 1.0f;
+        if (speed < 0.25f) speed = 0.25f;
+        if (speed > 2.5f) speed = 2.5f;
+        try {
+            PlaybackParams params = new PlaybackParams();
+            params.setSpeed(speed);
+            mp.setPlaybackParams(params);
+        } catch (Exception ignored) { }
     }
 }

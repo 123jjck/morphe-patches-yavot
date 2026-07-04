@@ -300,59 +300,7 @@ Second \"item\" text"</string>
 
 請驗證套件名稱是否正確以及應用程式是否已安裝"</string>
   <string name="morphe_external_downloader_empty_warning">套件名稱不能為空</string>
-  <!-- video.voiceovertranslation.voiceOverTranslationPatch -->
-  <string name="morphe_vot_screen_title">語音轉錄翻譯</string>
-  <string name="morphe_vot_screen_summary">使用裝置上的文字轉語音功能朗讀影片字幕，並與播放同步</string>
-  <string name="morphe_vot_enabled_title">語音轉錄翻譯</string>
-  <string name="morphe_vot_caption_language_title">語言</string>
-  <string name="morphe_vot_translation_service_title">翻譯供應商</string>
-  <string name="morphe_vot_original_audio_volume_title">原始音量</string>
-  <string name="morphe_vot_original_audio_volume_summary">翻譯語音講話時，原始 YouTube 音影片音量</string>
-  <string name="morphe_vot_translation_volume_title">翻譯音量</string>
-  <string name="morphe_vot_translation_volume_summary">配音翻譯語音的音量</string>
-  <string name="morphe_vot_max_speech_rate_title">最大語速</string>
-  <string name="morphe_vot_max_speech_rate_summary">在字幕欄位中調整語速時的最大倍數</string>
-  <string name="morphe_vot_mymemory_info_summary">"免費翻譯 API，無需 API 金鑰。免費版每日最多可翻譯 5,000 個字元，或輸入電子郵件地址後，每日最多可翻譯 50,000 個字元。
-
-點擊這裡打開 MyMemory.translated.net"</string>
-  <string name="morphe_vot_mymemory_email_title">MyMemory 電子郵件</string>
-  <string name="morphe_vot_mymemory_email_summary">選用。輸入您的 MyMemory 電子郵件地址，將每日字元限制從 5,000 個提高到 50,000 個。留空則使用匿名限制</string>
-  <string name="morphe_vot_openrouter_info_summary">"透過 OpenRouter 提供的付費 AI 翻譯。一次充值即可翻譯數千個影片。Mistral Nemo 是最便宜的選項，Gemma 4 則提供最高的品質。
-
-點擊這裡打開 OpenRouter.ai"</string>
-  <string name="morphe_vot_openrouter_api_key_title">OpenRouter API 金鑰</string>
-  <string name="morphe_vot_openrouter_api_key_summary">您的 OpenRouter API 金鑰。在 OpenRouter.ai &gt; 工作區 &gt; API 金鑰中建立金鑰</string>
-  <string name="morphe_vot_openrouter_model_title">OpenRouter 模型</string>
-  <string name="morphe_vot_openrouter_model_custom">自訂</string>
-  <string name="morphe_vot_openrouter_not_configured_title">OpenRouter 未設定</string>
-  <string name="morphe_vot_openrouter_not_configured_message">在設定中輸入您的 OpenRouter API 金鑰，然後再選取此供應商</string>
-  <string name="morphe_vot_cost_free">免費</string>
   <!-- %s is dollar cost, e.g. $0.10 per 100 hours -->
-  <string name="morphe_vot_cost_per_hour">每 100 小時影片 %s 元</string>
-  <string name="morphe_vot_tts_voice_type">語音</string>
-  <string name="morphe_vot_tts_system">系統</string>
-  <string name="morphe_vot_voice_gender_male_multilingual">多語言男性</string>
-  <string name="morphe_vot_voice_gender_female_multilingual">多語言女性</string>
-  <string name="morphe_vot_voice_gender_male">男性</string>
-  <string name="morphe_vot_voice_gender_female">女性</string>
-  <string name="morphe_vot_tts_sample">變形時間到了！</string>
-  <string name="morphe_vot_http_error_title">翻譯不可用</string>
-  <string name="morphe_vot_http_error_message">"翻譯服務傳回 HTTP 錯誤 %s。您的 IP 位址可能已被限制速率，長達 24 小時。
-
-若要繼續使用翻譯，請在設定中切換至其他翻譯供應商，或使用 VPN"</string>
-  <string name="morphe_vot_do_not_show_again">不再顯示</string>
-  <string name="morphe_vot_export_api_key_warning">"您的設定包含 OpenRouter API 金鑰。
-
-您的 API 金鑰不應與他人分享。具有存取權的人可以使用您的 OpenRouter 額度"</string>
-  <string name="morphe_vot_openrouter_credits_title">OpenRouter 信用額度已達標</string>
-  <string name="morphe_vot_openrouter_credits_message">您的 OpenRouter 信用額度已達標。在 OpenRouter.ai 補充您的餘額或提高您的金鑰支出限制</string>
-  <string name="morphe_vot_openrouter_open_website">開啟 OpenRouter.ai</string>
-  <string name="morphe_vot_openrouter_error">OpenRouter 翻譯失敗 (HTTP %s)</string>
-  <string name="morphe_vot_mymemory_quota_title">MyMemory 每日額度已達標</string>
-  <string name="morphe_vot_mymemory_quota_next_available">下次可用時間為 %s。</string>
-  <string name="morphe_vot_mymemory_quota_message_no_email">您已用完今天的免費 MyMemory 翻譯額度 (5,000 個字元)。在設定中新增 MyMemory 電子郵件地址，將每日額度提高到 50,000 個字元，或切換至其他翻譯服務</string>
-  <string name="morphe_vot_mymemory_quota_message_with_email">您已用完今天的 MyMemory 翻譯額度 (50,000 個字元)。切換至其他翻譯服務或明天再試</string>
-  <string name="morphe_vot_mymemory_error">MyMemory 翻譯失敗 (狀態 %s)</string>
   <!-- interaction.loop.loopVideoPatch -->
   <string name="morphe_loop_video_title">啟用循環播放影片</string>
   <string name="morphe_do_not_remember_loop_video_title">記住循環播放影片</string>
