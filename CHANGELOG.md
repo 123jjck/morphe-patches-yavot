@@ -1,3 +1,11 @@
+## [1.34.0](https://github.com/123jjck/morphe-patches-yavot/compare/v1.33.0...v1.34.0) (2026-07-04)
+
+### ✨ New Features
+
+* Merge branch `feat/voice-over-translation` to `main` ([48fa47a](https://github.com/123jjck/morphe-patches-yavot/commit/48fa47a75da5d8982edfaf973ecdf0a01c1faf86))
+* **YouTube - Voice Over Translation:** Add OAuth token management functionality and user interface strings for Yandex authorization. ([e7a82c3](https://github.com/123jjck/morphe-patches-yavot/commit/e7a82c3e7cd52c06f0f789633290ff4340deb819))
+* **YouTube - Voice Over Translation:** Implement voice over translation settings and functionality, including language selection and volume controls. ([53432ac](https://github.com/123jjck/morphe-patches-yavot/commit/53432ac74dd5ed736918ffd08293bd745cb5969f))
+
 ## [1.33.0](https://github.com/MorpheApp/morphe-patches/compare/v1.32.0...v1.33.0) (2026-07-03)
 
 ### 🐛 Bug Fixes
