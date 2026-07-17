@@ -20,6 +20,18 @@ Second \"item\" text"</string>
   <string name="morphe_restart_first_run">Kurulumu tamamlamak için yeniden başlatın</string>
   <!-- layout.branding.baseCustomBrandingPatch -->
   <string name="morphe_custom_branding_name_title">Uygulama adı</string>
+  <!-- interaction.downloads.downloadsPatch -->
+  <string name="morphe_external_downloader_screen_title">Harici indirmeler</string>
+  <string name="morphe_external_downloader_name_title">İndirici paket adı</string>
+  <string name="morphe_external_downloader_name_summary">Yüklediğiniz harici indirici uygulamanın paket adı</string>
+  <string name="morphe_external_downloader_other_item_hint">Paket adı girin</string>
+  <string name="morphe_external_downloader_other_item">Diğer</string>
+  <string name="morphe_external_downloader_not_found_title">Uygulama yüklü değil</string>
+  <string name="morphe_external_downloader_not_installed_warning">%s yüklü değil. Lütfen yükleyin.</string>
+  <string name="morphe_external_downloader_package_not_found_warning">"%s paket adına sahip yüklü uygulama bulunamadı
+
+Paket adının doğru olduğundan ve uygulamanın yüklü olduğundan emin olun"</string>
+  <string name="morphe_external_downloader_empty_warning">Paket adı boş bırakılamaz</string>
   <!-- Translations of this should be identical to morphe_custom_branding_icon_entry_7 -->
   <string name="morphe_custom_branding_name_entry_5">Özel</string>
   <string name="morphe_custom_branding_icon_title">Uygulama simgesi</string>
@@ -40,7 +52,7 @@ Second \"item\" text"</string>
   <string name="morphe_check_watch_history_domain_name_dialog_title">Morphe Bildirimi</string>
   <string name="morphe_check_watch_history_domain_name_dialog_message">İzleme geçmişiniz kaydedilmiyor.&lt;br&gt;&lt;br&gt;Bu büyük ihtimalle bir reklam engelleyici DNS\'den veya proxy\'den kaynaklanıyor.&lt;br&gt;&lt;br&gt;Bunu düzeltmek için, &lt;b&gt;s.youtube.com&lt;/b&gt; adresini beyaz listeye ekleyin veya bütün engelleyici DNSleri ve proxy\'leri kapatın.</string>
   <string name="morphe_check_watch_history_domain_name_dialog_ignore">Bir daha gösterme</string>
-  <!-- misc.fix.playback.spoofVideoStreamsPatch -->
+  <!-- misc.spoof.spoofVideoStreamsPatch -->
   <string name="morphe_spoof_video_streams_screen_title">Video akışlarını taklit et</string>
   <string name="morphe_spoof_video_streams_screen_summary">Oynatma sorunlarını önlemek için istemci video akışlarını taklit et</string>
   <string name="morphe_spoof_video_streams_title">Video akışlarını taklit et</string>
@@ -140,11 +152,28 @@ Oynatıcı JavaScript hash'i güncel değilse oynatma başarısız olur."</strin
   <string name="morphe_replace_links_with_shortener_title">Paylaşım bağlantılarını youtu.be olarak değiştir</string>
   <string name="morphe_replace_links_with_shortener_summary">Videoları kısaltılmış youtu.be URL formatını kullanmaya zorlar</string>
   <!-- misc.debugging.enableDebuggingPatch -->
-  <string name="morphe_debug_protobuffer_title">Hata ayıklama günlük protokol arabelleği</string>
+  <string name="morphe_debug_protobuffer_title">Hata ayıklama günlüğü protokol arabelleği</string>
   <string name="morphe_debug_protobuffer_summary">Geliştiricilerin uygulama bileşenlerini belirlemesine yardımcı olacak ek günlük bilgileri ekler</string>
   <string name="morphe_debug_protobuffer_user_dialog_message">"Bu ayarı etkinleştirmek, bazı kullanıcı arayüzü bileşenleri için ekrandaki metin de dahil olmak üzere ek düzen verilerini günlüğe kaydeder.
 
 Bu, özel filtreler oluştururken bileşenleri tanımlamaya yardımcı olabilir.
 
 Ancak, bunun etkinleştirilmesi IP adresiniz gibi bazı kullanıcı verilerini de günlüğe kaydeder."</string>
+  <!-- Custom filter -->
+  <string name="morphe_custom_filter_screen_title">Özel filtre</string>
+  <string name="morphe_custom_filter_screen_summary">Herhangi bir bileşeni gizlemek için özel filtreleri yapılandırın</string>
+  <string name="morphe_custom_filter_title">Özel filtreyi etkinleştir</string>
+  <string name="morphe_custom_filter_strings_title">Özel filtre</string>
+  <!-- 'Component path builder strings' is the technical name for identifying the Litho UI layout items to hide. This is an advanced feature and most users will never use this. -->
+  <string name="morphe_custom_filter_strings_summary">Filtrelenecek bileşen yolu oluşturucu dizelerinin yeni satırlarla ayrılmış listesi</string>
+  <string name="morphe_custom_filter_toast_invalid_syntax">Geçersiz özel filtre: %s</string>
+  <!-- misc.spoof.appversion.spoofAppVersionPatch -->
+  <string name="morphe_spoof_app_version_title">Uygulama sürümünü taklit et</string>
+  <string name="morphe_spoof_app_version_summary">Sunucuya daha eski bir uygulama sürümü kullandığınızı düşündürerek eski arayüz özelliklerini geri yükler</string>
+  <string name="morphe_spoof_app_version_user_dialog_message">"Uygulama sürümü, daha eski bir sürüme taklit edilecektir.
+
+Bu, uygulamanın görünümünü ve özelliklerini değiştirecektir, ancak bilinmeyen yan etkiler ortaya çıkabilir.
+
+Daha sonra kapatılırsa, arayüz hatalarını önlemek için uygulama verilerinin temizlenmesi önerilir."</string>
+  <string name="morphe_spoof_app_version_target_title">Hedef uygulama sürümü taklidi</string>
 </resources>
