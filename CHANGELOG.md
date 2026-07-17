@@ -1,3 +1,57 @@
+## [1.35.0](https://github.com/123jjck/morphe-patches-yavot/compare/v1.34.0...v1.35.0) (2026-07-17)
+
+### 🐛 Bug Fixes
+
+* **GmsCore support:** Use custom provider package name when `Change package name` is used ([7d0d56d](https://github.com/123jjck/morphe-patches-yavot/commit/7d0d56d0652dbfd3bb6cd5b21dc21310e2b73e68))
+* **Network proxy:** Support HTTPS proxies for auxiliary requests ([#2022](https://github.com/123jjck/morphe-patches-yavot/issues/2022)) ([ee52f90](https://github.com/123jjck/morphe-patches-yavot/commit/ee52f9033687b6022f494f9afba4e0abb1bccba1))
+* **Reddit - Settings:** Morphe language does not change after restarting ([#1950](https://github.com/123jjck/morphe-patches-yavot/issues/1950)) ([fc41c27](https://github.com/123jjck/morphe-patches-yavot/commit/fc41c2757c1c6897e314e35de3e227adede03939))
+* **Spoof video streams:** Change default client to 'TV' ([ce3f496](https://github.com/123jjck/morphe-patches-yavot/commit/ce3f496f9013af2d4146dc0d0f86a629d9dd7d9d))
+* **Spoof video streams:** Check setting value instead of availability for JavaScript toggles ([1d92650](https://github.com/123jjck/morphe-patches-yavot/commit/1d926503bf9ef29d8e135786479ecef1de20adbc))
+* **YouTube - Add to queue:** Allows tablet patches for versions 21.xx ([6ef2a3f](https://github.com/123jjck/morphe-patches-yavot/commit/6ef2a3f7aadb845b0e0ec5b839773d8e68504868))
+* **YouTube - Add to queue:** Prevents the flyout video id reset blocking ([93d134f](https://github.com/123jjck/morphe-patches-yavot/commit/93d134f9df792e35f0b1e40ef933262bc40fa517))
+* **YouTube - Copy video link:** Copied video link is always shortened ([#1993](https://github.com/123jjck/morphe-patches-yavot/issues/1993)) ([ff0e8cc](https://github.com/123jjck/morphe-patches-yavot/commit/ff0e8ccb935ca3e267c625778ad93f2db213c367))
+* **YouTube - FlyoutUtils:** Error message when opening Shorts flyout menu ([aaf5f55](https://github.com/123jjck/morphe-patches-yavot/commit/aaf5f55a3a6d769dd850023925725481768e3a15))
+* **YouTube - Hide ads:** Hide shopping links in transcripts ([#2025](https://github.com/123jjck/morphe-patches-yavot/issues/2025)) ([0cf389b](https://github.com/123jjck/morphe-patches-yavot/commit/0cf389b921c813961f8b4d3bd12636b84e3f61d1))
+* **YouTube - Hide layout components:** Comment box being hidden on `20.21.37` ([7f77b20](https://github.com/123jjck/morphe-patches-yavot/commit/7f77b20404368279eb216e4911cfe27b9047655e))
+* **YouTube - Miniplayer/Disable automatic reposition:** Support vertical position lock ([4adc714](https://github.com/123jjck/morphe-patches-yavot/commit/4adc71465bbee964112e45ffa93e685901fcaec5))
+* **YouTube - Open system share sheet:** Support channelID & commentID fetching ([#1975](https://github.com/123jjck/morphe-patches-yavot/issues/1975)) ([34c2b58](https://github.com/123jjck/morphe-patches-yavot/commit/34c2b58eab29967b1fc784ae0c644297b850ca36))
+* **YouTube - Playback speed:** Support new native playback speed menu ([#1957](https://github.com/123jjck/morphe-patches-yavot/issues/1957)) ([a4641d6](https://github.com/123jjck/morphe-patches-yavot/commit/a4641d6731170e03b26abc4ecb37230193271673))
+* **YouTube - Return YouTube Dislike:** Remove RYD Shorts due to YT removing Shorts dislike and RYD API no longer providing reliable Shorts dislikes data ([#1924](https://github.com/123jjck/morphe-patches-yavot/issues/1924)) ([fcb613a](https://github.com/123jjck/morphe-patches-yavot/commit/fcb613aacb28ccd319f7211282305d0c6a912874))
+* **YouTube - Spoof video streams:** Mention Android Studio 720p limitation in settings UI ([387abbf](https://github.com/123jjck/morphe-patches-yavot/commit/387abbf4c543a4c5ed9b6574bf792e7ce3b1c949))
+* **YouTube - StreamOrDetailsDataRequest:** Sometimes player headers is null ([#2035](https://github.com/123jjck/morphe-patches-yavot/issues/2035)) ([c9552c0](https://github.com/123jjck/morphe-patches-yavot/commit/c9552c0eee1415e290218cfe603bb4af98ed0681))
+* **YouTube - Voice over translation:** Keep the user's original audio volume ratio after rewinding ([#1939](https://github.com/123jjck/morphe-patches-yavot/issues/1939)) ([d673d91](https://github.com/123jjck/morphe-patches-yavot/commit/d673d9181d7a203824bab2a83955d965d2423c3b))
+* **YouTube - Voice Over Translation:** Sync translation audio speed with video playback speed ([55a0c4c](https://github.com/123jjck/morphe-patches-yavot/commit/55a0c4cabead88ea98ecb19e7d3271a36b8a3ce2))
+* **YouTube Music - Downloads:** Add "Override feed/search flyout button" setting ([#1931](https://github.com/123jjck/morphe-patches-yavot/issues/1931)) ([af7cf55](https://github.com/123jjck/morphe-patches-yavot/commit/af7cf55a99c9ebf8e42649af4b931bb74cedf086))
+* **YouTube Music - Downloads:** Hide Premium dialog on external download ([#2009](https://github.com/123jjck/morphe-patches-yavot/issues/2009)) ([4cfe552](https://github.com/123jjck/morphe-patches-yavot/commit/4cfe552daa946c8d4ca946aeffffb63b62ad8370))
+* **YouTube Music:** Fix 9.15.51 startup ([9e2c372](https://github.com/123jjck/morphe-patches-yavot/commit/9e2c37218aeb601d1d05d66fba4d89255d20c01f))
+
+### ✨ New Features
+
+* Merge upstream `v1.35.0` and VOT speed sync fix to `main` ([6054b12](https://github.com/123jjck/morphe-patches-yavot/commit/6054b1255f3ae578254a1a320d236d8c39720c5d))
+* **YouTube - Hide layout components:** Add "AI channel filter" settings ([#1972](https://github.com/123jjck/morphe-patches-yavot/issues/1972)) ([03c0b97](https://github.com/123jjck/morphe-patches-yavot/commit/03c0b97f983a3bbae22bba3a5f51bd2fc09e9a25))
+* **YouTube - Hide layout components:** Add "Hide filter bar in comments" and "Sanitize highlighted search links" settings ([#1935](https://github.com/123jjck/morphe-patches-yavot/issues/1935)) ([1876708](https://github.com/123jjck/morphe-patches-yavot/commit/187670860225c5c8272a4f34d131a98448ca311c))
+* **YouTube - Hide layout components:** Add "Hide gift animation and cards" and "Hide gift button" settings ([#1991](https://github.com/123jjck/morphe-patches-yavot/issues/1991)) ([83451d9](https://github.com/123jjck/morphe-patches-yavot/commit/83451d95249b4e951b466c3b7ff8a64b3d7f1a4d))
+* **YouTube - Hide layout components:** Add "Hide video thumbnail" setting ([#2043](https://github.com/123jjck/morphe-patches-yavot/issues/2043)) ([360bc41](https://github.com/123jjck/morphe-patches-yavot/commit/360bc412759a8de12ecd31b30f95d199801eea0f))
+* **YouTube - Miniplayer:** Add "Disable automatic reposition" setting ([#1920](https://github.com/123jjck/morphe-patches-yavot/issues/1920)) ([e49c0b4](https://github.com/123jjck/morphe-patches-yavot/commit/e49c0b4053a2bcfd0f9b1140d1e5438e43d215c5))
+* **YouTube - Miniplayer:** Add "Disable playback with horizontal drag" setting ([#1916](https://github.com/123jjck/morphe-patches-yavot/issues/1916)) ([186f060](https://github.com/123jjck/morphe-patches-yavot/commit/186f0603352f26e30fdfab100fe0b77eb22496d6))
+* **YouTube - Swipe controls:** Add playback speed step preference ([#1977](https://github.com/123jjck/morphe-patches-yavot/issues/1977)) ([25927d1](https://github.com/123jjck/morphe-patches-yavot/commit/25927d12ec5d5a1c0bba570a70ba09fe1e28497c))
+* **YouTube - Theme:** Add "Modern YouTube" dark theme preset ([#1918](https://github.com/123jjck/morphe-patches-yavot/issues/1918)) ([0a381c8](https://github.com/123jjck/morphe-patches-yavot/commit/0a381c8c0cd80d1bd3cb1f339587e48798ced00f))
+* **YouTube Music - Change miniplayer color:** Add "Change navigation bar color" setting ([#1908](https://github.com/123jjck/morphe-patches-yavot/issues/1908)) ([9b570cd](https://github.com/123jjck/morphe-patches-yavot/commit/9b570cd2cfcd0695fa38ea84541133940146e7cf))
+* **YouTube Music - Settings:** Add Morphe language selector ([#1937](https://github.com/123jjck/morphe-patches-yavot/issues/1937)) ([443500c](https://github.com/123jjck/morphe-patches-yavot/commit/443500c66718d722a393707712c78ac3232e0fbd))
+* **YouTube Music:** Add `Disable dislike redirection` patch ([#1962](https://github.com/123jjck/morphe-patches-yavot/issues/1962)) ([e399e05](https://github.com/123jjck/morphe-patches-yavot/commit/e399e05835f40e00a5efb9f311eadbee9be599a9))
+* **YouTube Music:** Add `Downloads` patch ([#1881](https://github.com/123jjck/morphe-patches-yavot/issues/1881)) ([d078a37](https://github.com/123jjck/morphe-patches-yavot/commit/d078a37cd1a8ef93f9546efb24e783a7b826a8b8))
+* **YouTube Music:** Add `Hide flyout menu components` patch ([#1906](https://github.com/123jjck/morphe-patches-yavot/issues/1906)) ([dbc4ba0](https://github.com/123jjck/morphe-patches-yavot/commit/dbc4ba08c0e23838dafa17d7fd0cfc9d33ba6524))
+* **YouTube Music:** Add `Hide layout components` patch with `Custom filter` ([#1919](https://github.com/123jjck/morphe-patches-yavot/issues/1919)) ([f6e9849](https://github.com/123jjck/morphe-patches-yavot/commit/f6e9849331a16eebf870338e75012a529915d3b8))
+* **YouTube Music:** Add `Hide music action buttons` patch ([#1953](https://github.com/123jjck/morphe-patches-yavot/issues/1953)) ([b142f87](https://github.com/123jjck/morphe-patches-yavot/commit/b142f87e39cbe30e046d8731fa2997d6a1523bf7))
+* **YouTube Music:** Add `Remember shuffle state` patch ([#1963](https://github.com/123jjck/morphe-patches-yavot/issues/1963)) ([7e8a6ba](https://github.com/123jjck/morphe-patches-yavot/commit/7e8a6babdbafd1dd87ac1397c088f318b89a02da))
+* **YouTube Music:** Add `Spoof app version` patch ([#1948](https://github.com/123jjck/morphe-patches-yavot/issues/1948)) ([46a86d3](https://github.com/123jjck/morphe-patches-yavot/commit/46a86d3106e9e00d718e5410ef0c03fb6b228f90))
+
+### 🚀 Updated App Support
+
+* **Reddit:** Add experimental support for `2026.27.0` ([4dabc41](https://github.com/123jjck/morphe-patches-yavot/commit/4dabc4142664669937d47ffad7d6f768aaa48f8e))
+* **Reddit:** Add experimental support for `2026.28.0` ([9f18957](https://github.com/123jjck/morphe-patches-yavot/commit/9f18957acd350db0180cb2c66521e8b83b598558))
+* **YouTube:** Add support for `21.04.223` ([12e19c0](https://github.com/123jjck/morphe-patches-yavot/commit/12e19c00a143c90b3dd12668a45e07b0cc6dd7a0))
+
 ## [1.35.0](https://github.com/MorpheApp/morphe-patches/compare/v1.34.0...v1.35.0) (2026-07-16)
 
 ### 🐛 Bug Fixes

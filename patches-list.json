@@ -9421,16 +9421,13 @@
       "options": []
     },
     {
-      "name": "Voice over translation",
-      "description": "Adds additional voice over languages using text-to-speech synchronized to the video playback.",
+      "name": "Voice Over Translation",
+      "description": "Adds an option to enable Yandex voice-over translation of video audio tracks.",
       "default": true,
       "dependencies": [
-        "BytecodePatch",
-        "BytecodePatch",
-        "BytecodePatch",
-        "BytecodePatch",
-        "BytecodePatch",
         "ResourcePatch",
+        "BytecodePatch",
+        "BytecodePatch",
         "BytecodePatch"
       ],
       "compatiblePackages": [
@@ -9504,6 +9501,16 @@
           ]
         }
       ],
+      "options": []
+    },
+    {
+      "name": "Voice Over Translation - Original Volume",
+      "description": "Hooks AudioTrack.setVolume to duck original audio when VOT translation is playing.",
+      "default": true,
+      "dependencies": [
+        "BytecodePatch"
+      ],
+      "compatiblePackages": null,
       "options": []
     }
   ]
