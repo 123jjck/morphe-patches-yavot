@@ -57,6 +57,7 @@ public final class VideoInformation {
     private static final String VIDEO_QUALITY_PREMIUM_NAME = "Premium";
 
     private static final float DEFAULT_YOUTUBE_PLAYBACK_SPEED = 1.0f;
+    public static boolean savePlaybackSpeed = false;
     /**
      * Prefix present in all Short player parameters signature.
      */
@@ -137,6 +138,7 @@ public final class VideoInformation {
         try {
             Logger.printDebug(() -> "newVideoStarted");
 
+            savePlaybackSpeed = false;
             playerControllerRef = new WeakReference<>(Objects.requireNonNull(playerController));
             videoLength = 0;
             channelId = "";
@@ -151,6 +153,13 @@ public final class VideoInformation {
         } catch (Exception ex) {
             Logger.printException(() -> "initialize failure", ex);
         }
+    }
+
+    /**
+     * Injection point.
+     */
+    public static void enableSavePlaybackSpeed() {
+        Utils.runOnMainThreadDelayed(() -> savePlaybackSpeed = true, 500);
     }
 
     /**
@@ -261,6 +270,7 @@ public final class VideoInformation {
         if (playbackSpeed != currentVideoSpeed) {
             Logger.printDebug(() -> "Video speed changed: " + currentVideoSpeed);
             playbackSpeed = currentVideoSpeed;
+            notifyPlaybackSpeedListeners();
         }
     }
 
@@ -272,7 +282,16 @@ public final class VideoInformation {
      */
     public static void userSelectedPlaybackSpeed(float userSelectedPlaybackSpeed) {
         Logger.printDebug(() -> "User selected playback speed: " + userSelectedPlaybackSpeed);
-        playbackSpeed = userSelectedPlaybackSpeed;
+        if (playbackSpeed != userSelectedPlaybackSpeed) {
+            playbackSpeed = userSelectedPlaybackSpeed;
+            notifyPlaybackSpeedListeners();
+        }
+    }
+
+    private static void notifyPlaybackSpeedListeners() {
+        for (Runnable r : playbackSpeedChangeListeners) {
+            try { r.run(); } catch (Exception e) { Logger.printException(() -> "Playback speed listener", e); }
+        }
     }
 
     /**
@@ -530,9 +549,7 @@ public final class VideoInformation {
         Logger.printDebug(() -> "Overriding playback speed to: " + speedOverride);
         if (playbackSpeed != speedOverride) {
             playbackSpeed = speedOverride;
-            for (Runnable r : playbackSpeedChangeListeners) {
-                try { r.run(); } catch (Exception e) { Logger.printException(() -> "Playback speed listener", e); }
-            }
+            notifyPlaybackSpeedListeners();
         }
     }
 
@@ -545,9 +562,7 @@ public final class VideoInformation {
         if (playbackSpeed != newlyLoadedPlaybackSpeed) {
             Logger.printDebug(() -> "Video speed changed: " + newlyLoadedPlaybackSpeed);
             playbackSpeed = newlyLoadedPlaybackSpeed;
-            for (Runnable r : playbackSpeedChangeListeners) {
-                try { r.run(); } catch (Exception e) { Logger.printException(() -> "Playback speed listener", e); }
-            }
+            notifyPlaybackSpeedListeners();
         }
     }
 
