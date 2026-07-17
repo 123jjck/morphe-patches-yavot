@@ -270,6 +270,7 @@ public final class VideoInformation {
         if (playbackSpeed != currentVideoSpeed) {
             Logger.printDebug(() -> "Video speed changed: " + currentVideoSpeed);
             playbackSpeed = currentVideoSpeed;
+            notifyPlaybackSpeedListeners();
         }
     }
 
@@ -281,7 +282,16 @@ public final class VideoInformation {
      */
     public static void userSelectedPlaybackSpeed(float userSelectedPlaybackSpeed) {
         Logger.printDebug(() -> "User selected playback speed: " + userSelectedPlaybackSpeed);
-        playbackSpeed = userSelectedPlaybackSpeed;
+        if (playbackSpeed != userSelectedPlaybackSpeed) {
+            playbackSpeed = userSelectedPlaybackSpeed;
+            notifyPlaybackSpeedListeners();
+        }
+    }
+
+    private static void notifyPlaybackSpeedListeners() {
+        for (Runnable r : playbackSpeedChangeListeners) {
+            try { r.run(); } catch (Exception e) { Logger.printException(() -> "Playback speed listener", e); }
+        }
     }
 
     /**
@@ -539,9 +549,7 @@ public final class VideoInformation {
         Logger.printDebug(() -> "Overriding playback speed to: " + speedOverride);
         if (playbackSpeed != speedOverride) {
             playbackSpeed = speedOverride;
-            for (Runnable r : playbackSpeedChangeListeners) {
-                try { r.run(); } catch (Exception e) { Logger.printException(() -> "Playback speed listener", e); }
-            }
+            notifyPlaybackSpeedListeners();
         }
     }
 
@@ -554,9 +562,7 @@ public final class VideoInformation {
         if (playbackSpeed != newlyLoadedPlaybackSpeed) {
             Logger.printDebug(() -> "Video speed changed: " + newlyLoadedPlaybackSpeed);
             playbackSpeed = newlyLoadedPlaybackSpeed;
-            for (Runnable r : playbackSpeedChangeListeners) {
-                try { r.run(); } catch (Exception e) { Logger.printException(() -> "Playback speed listener", e); }
-            }
+            notifyPlaybackSpeedListeners();
         }
     }
 

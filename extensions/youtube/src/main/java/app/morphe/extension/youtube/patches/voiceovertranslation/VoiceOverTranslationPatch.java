@@ -67,6 +67,7 @@ import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.youtube.settings.Settings;
 import app.morphe.extension.youtube.patches.VideoInformation;
+import app.morphe.extension.youtube.patches.playback.speed.CustomPlaybackSpeedPatch;
 import app.morphe.extension.youtube.shared.VideoState;
 
 import static app.morphe.extension.shared.StringRef.str;
@@ -933,9 +934,11 @@ public class VoiceOverTranslationPatch {
         }
         if (speed <= 0f) speed = 1.0f;
         if (speed < 0.25f) speed = 0.25f;
-        if (speed > 2.5f) speed = 2.5f;
+        final float maxSpeed = CustomPlaybackSpeedPatch.PLAYBACK_SPEED_MAXIMUM;
+        if (speed > maxSpeed) speed = maxSpeed;
         try {
-            PlaybackParams params = new PlaybackParams();
+            PlaybackParams params = mp.getPlaybackParams();
+            if (params.getSpeed() == speed) return;
             params.setSpeed(speed);
             mp.setPlaybackParams(params);
         } catch (Exception ignored) { }
